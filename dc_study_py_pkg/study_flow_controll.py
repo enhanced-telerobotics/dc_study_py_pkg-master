@@ -8,18 +8,23 @@ from sensor_msgs.msg import Joy
 import time
 import asyncio
 import numpy as np
-import json
-import csv
+import json, csv, os
 
 
 class SimStudyController(Node):
     def __init__(self, robot):
         super().__init__('sim_usr_subscriber')
-        # Json file to story current progress
-        self.state_file = '/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/user_study_state.json'
+
+        # Paths for saving state and conditions (set as relative paths)
+        self.state_file = os.path.join(
+            os.path.dirname(__file__), 'user_study_state.json')
+        self.conditions_json = "/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/dc_study_py_pkg/trial_conditions.json"
+        self.data_csv = os.path.join(
+            os.path.dirname(__file__), 'trial_pose_data.csv')
+
+        # Initialize current state and study phases
         self.current_state = 'practice'
-        self.study_state = ['practice', 'baseline',
-                            'training_task', 'evaluation']
+        self.study_state = ['practice', 'baseline', 'training_task', 'evaluation']
         self.trials_completed = 0
         self.blocks_completed = 0
         self.current_conditions = {
@@ -27,35 +32,36 @@ class SimStudyController(Node):
             'distance': None,
             'direction': None
         }
-        # The button to controll user study go
+
+        # Button subscription for user interaction
         self.btn_sub = self.create_subscription(Joy, 'joy', self.btn_cb, 10)
         self.btn_curr_state = False
         self.btn_last_state = False
-        # Counter flag
-        self.counter_end = False
 
-        # Publishers to control sim behavior
-        self.robot_control = self.create_publisher(Vector3, 'robot_cmd', 10)
-        self.target_control = self.create_publisher(Vector3, 'target_cmd', 10)
-        # self.state_timer = self.create_timer(0.1, self.robot_cmd_cb)
+        # Control flags
+        self.counter_end = False
         self.is_home = False
         self.is_move = False
         self.trial_ready = False
         self.trial_end = False
-        self.conditions_json = '/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/trial_conditions.json'
-        # Create a client for the 'set_parameters' service of the delay node
-        self.parameter_client = self.create_client(
-            SetParameters, '/pose_delay_node/set_parameters')
-        # Data recorder
+
+        # Publishers for robot and target control
+        self.robot_control = self.create_publisher(Vector3, 'robot_cmd', 10)
+        self.target_control = self.create_publisher(Vector3, 'target_cmd', 10)
+
+        # Create client for 'set_parameters' service to modify delay settings
+        self.parameter_client = self.create_client(SetParameters, '/pose_delay_node/set_parameters')
+
+        # Subscription for pose data
         self.is_recording = False
-        self.pose_data = self.create_subscription(
-            Pose, 'delayed_pose', self.pose_data_cb, 10)
-        self.data_csv = '/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/trial_pose_data.csv'
+        self.pose_data = self.create_subscription(Pose, 'delayed_pose', self.pose_data_cb, 10)
         self.pose_data_buffer = []
-        # Wait for the service to be available
+
+        # Wait for the service to become available
         while not self.parameter_client.wait_for_service(timeout_sec=5.0):
             self.get_logger().warn('Waiting for parameter service to become available...')
 
+        # Restore previous state if available
         self.restore_state()
     # Data recorder
 
@@ -71,7 +77,7 @@ class SimStudyController(Node):
                 self.current_conditions['delay'],  # Delay condition
                 self.current_conditions['distance'],  # Distance condition
                 self.current_conditions['direction'],  # Direction condition
-                msg.position.x, msg.position.y, msg.position.z,
+                msg.position.x - 1.475, msg.position.y, msg.position.z + 0.75,
                 msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w
             ])
 
