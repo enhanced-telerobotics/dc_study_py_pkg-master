@@ -5,6 +5,7 @@ from rcl_interfaces.srv import SetParameters
 from rclpy.parameter import Parameter
 from geometry_msgs.msg import Vector3, Pose
 from sensor_msgs.msg import Joy
+from std_msgs.msg import Bool
 import time
 import asyncio
 import numpy as np
@@ -47,7 +48,8 @@ class SimStudyController(Node):
 
         # Publishers for robot and target control
         self.robot_control = self.create_publisher(Vector3, 'robot_cmd', 10)
-        self.target_control = self.create_publisher(Vector3, 'target_cmd', 10)
+        self.target_control = self.create_publisher(Pose, 'target_cmd', 10)
+        self.counter_control = self.create_publisher(Bool, 'counter_cmd', 10)
 
         # Create client for 'set_parameters' service to modify delay settings
         self.parameter_client = self.create_client(SetParameters, '/pose_delay_node/set_parameters')
@@ -245,11 +247,16 @@ class SimStudyController(Node):
 
     def count_down(self):
         if not self.counter_end:
+            msg = Bool()
+            msg.data = True
+            self.counter_control.publish(msg)
             print("Starting countdown:")
             for i in range(3, 0, -1):
                 print(str(i) + "...")
                 time.sleep(1)
             print("Countdown complete!")
+            msg.data = False
+            self.counter_control.publish(msg)
             self.counter_end = True
 
     def allow_user_go(self):
