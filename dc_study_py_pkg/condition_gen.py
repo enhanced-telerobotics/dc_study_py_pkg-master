@@ -4,7 +4,7 @@ from itertools import product
 # Define the values for delay, distance, and direction
 delay_values = [100, 400, 700]  # For real trials
 zero_delay = 0  # For catch trials
-dist_values = [0.02, 0.04, 0.06]
+dist_values = [0.01, 0.03, 0.05]
 dir_values = ['up', 'right', 'diag']
 
 # Number of blocks for the real task
@@ -81,7 +81,7 @@ for block in range(num_blocks_training_task):
 conditions = {
     "practice": practice_conditions,
     "baseline": baseline_conditions,
-    "training": training_task_conditions
+    "training_task": training_task_conditions
 }
 
 # Save the conditions to a JSON file

@@ -242,6 +242,9 @@ class SimStudyController(Node):
                 self.get_logger().info("Button pressed! Please hold till you finished this run..")
                 self.trial_ready = True
             elif not self.btn_curr_state and self.btn_last_state:
+                r_msg = Vector3()
+                r_msg.z = 1.0
+                self.robot_control.publish(r_msg)
                 self.trial_end = True
             self.btn_last_state = self.btn_curr_state
 
