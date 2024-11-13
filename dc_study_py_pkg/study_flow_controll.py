@@ -281,10 +281,11 @@ class SimStudyController(Node):
         # Ensure the home position is defined
         # Replace with `self.home` if defined elsewhere
         home_pos = np.array([-1.475, 0, 0.75])
-
+        target_quternion = [0.0, -np.sqrt(2)/2, 0.0, np.sqrt(2)/2]
         # Convert the `direction` parameter to a unit vector
         if direction == 'up':
             dir_vector = np.array([0, 0, 1])  # Up direction
+            target_quternion = [0.0, -1.0, 0.0, 0.0]
         elif direction == 'diag':
             # Diagonal direction (normalized)
             dir_vector = np.array([1, 1, 1]) / np.sqrt(3)
@@ -297,11 +298,14 @@ class SimStudyController(Node):
         target_pos = (home_pos + (dir_vector * distance))
         print(f'Sending target position at {target_pos}')
 
-        msg = Vector3()
-        msg.x = target_pos[0]
-        msg.y = target_pos[1]
-        msg.z = target_pos[2]
-
+        msg = Pose()
+        msg.position.x = target_pos[0]
+        msg.position.y = target_pos[1]
+        msg.position.z = target_pos[2]
+        msg.orientation.x = target_quternion[0]
+        msg.orientation.y = target_quternion[1]
+        msg.orientation.z = target_quternion[2]
+        msg.orientation.w = target_quternion[3]
         self.target_control.publish(msg)
 
     def log_state(self):
