@@ -39,12 +39,14 @@ class ImageStitcher(Node):
     def image_L_cb(self, msg):
         # Convert ROS Image message to OpenCV image
         self.image_L = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
+        self.image_L = cv2.rotate(self.image_L, cv2.ROTATE_180)
         self.image_L = cv2.flip(self.image_L, 1)
         self.stitch_and_publish()
 
     def image_R_cb(self, msg):
         # Convert ROS Image message to OpenCV image
         self.image_R = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
+        self.image_R = cv2.rotate(self.image_R, cv2.ROTATE_180)
         self.image_R = cv2.flip(self.image_R, 1)
         self.stitch_and_publish()
 

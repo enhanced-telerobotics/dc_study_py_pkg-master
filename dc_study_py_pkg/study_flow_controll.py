@@ -9,7 +9,9 @@ from std_msgs.msg import Bool
 import time
 import asyncio
 import numpy as np
-import json, csv, os
+import json
+import csv
+import os
 
 
 class SimStudyController(Node):
@@ -25,7 +27,8 @@ class SimStudyController(Node):
 
         # Initialize current state and study phases
         self.current_state = 'practice'
-        self.study_state = ['practice', 'baseline', 'training_task', 'evaluation']
+        self.study_state = ['practice', 'baseline',
+                            'training_task', 'evaluation']
         self.trials_completed = 0
         self.blocks_completed = 0
         self.current_conditions = {
@@ -52,11 +55,13 @@ class SimStudyController(Node):
         self.counter_control = self.create_publisher(Bool, 'counter_cmd', 10)
 
         # Create client for 'set_parameters' service to modify delay settings
-        self.parameter_client = self.create_client(SetParameters, '/pose_delay_node/set_parameters')
+        self.parameter_client = self.create_client(
+            SetParameters, '/pose_delay_node/set_parameters')
 
         # Subscription for pose data
         self.is_recording = False
-        self.pose_data = self.create_subscription(Pose, 'delayed_pose', self.pose_data_cb, 10)
+        self.pose_data = self.create_subscription(
+            Pose, 'delayed_pose', self.pose_data_cb, 10)
         self.pose_data_buffer = []
 
         # Wait for the service to become available
@@ -195,11 +200,33 @@ class SimStudyController(Node):
 
             print(
                 f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
-            self.home()
+            ''' 
+            Reaching Phase 
+            '''
             while not self.trial_ready:
                 await asyncio.sleep(0.1)  # Asynchronous wait
+            self.home()
             self.generate_target(distance, direction)
             self.alternate_delay_param(delay)
+            self.count_down()
+            print("Pleas go to target")
+            self.allow_user_go()
+            self.counter_end = False
+
+            while not self.trial_end:
+                await asyncio.sleep(0.1)
+            print(f"Reaching Trial {trial_num} complete.")
+            self.trial_ready = False
+            self.trial_end = False
+            ''' 
+            Retract Phase 
+            '''
+            while not self.trial_ready:
+                await asyncio.sleep(0.1)  # Asynchronous wait
+            # self.generate_target(distance, direction)
+            # self.alternate_delay_param(delay)
+            # We generate the reaching target in sim and keep the delay param
+            self.home_for_retract()
             self.count_down()
             print("Pleas go to target")
             self.allow_user_go()
@@ -208,14 +235,17 @@ class SimStudyController(Node):
             self.log_state()
             while not self.trial_end:
                 await asyncio.sleep(0.1)
-            print(f"Trial {trial_num} complete.")
+            print(f"Retract Trial {trial_num} complete.")
+            self.trial_ready = False
+            self.trial_end = False
+
+            # Params reset for next condition
             self.trials_completed = trial_num
             self.blocks_completed = trial_num // 5
-            if self.blocks_completed == 10:
+            if self.blocks_completed == 10 and self.trials_completed == 50:
                 self.test_break()
             self.is_recording = False
-            self.trial_ready = False  # Reset the flag after the trial is done
-            self.trial_end = False
+
 
     def get_trial_conditions(self, file_path, trial_num, state):
         with open(file_path, 'r') as json_file:
@@ -235,6 +265,7 @@ class SimStudyController(Node):
         else:
             print(f"Trial number {trial_num} not found in {state} phase.")
             return None
+
     def btn_cb(self, msg):
         if msg.buttons is not None:
             self.btn_curr_state = msg.buttons[3] == 1
@@ -243,6 +274,7 @@ class SimStudyController(Node):
                 self.trial_ready = True
             elif not self.btn_curr_state and self.btn_last_state:
                 r_msg = Vector3()
+                r_msg.x = 0.0
                 r_msg.z = 1.0
                 self.robot_control.publish(r_msg)
                 self.trial_end = True
@@ -272,11 +304,43 @@ class SimStudyController(Node):
         asyncio.create_task(self.save_to_csv())
 
     def test_break(self):
-        print('Time for break')
+        # Clear the terminal for better visibility
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+        print("\n" + "="*40)
+        print(" " * 10 + "\033[1;32m Time for a Break! \033[0m")
+        print("="*40)
+
+        print("""
+        /\_/\  
+       ( o.o )   Meow~ It's break time!
+        > ^ <
+        """)
+
+        print("\033[1;36mTake a moment to relax and stretch.\033[0m")
+
+        # Countdown for a 5-minute break
+        total_seconds = 300  # 5 minutes
+        for i in range(total_seconds, 0, -1):
+            mins, secs = divmod(i, 60)
+            time_display = f"{mins:02}:{secs:02}"
+            print(
+                f"\r\033[1;33mReturning in {time_display} (mm:ss)...\033[0m", end="")
+            time.sleep(1)
+
+        # Clear break message
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("Break over! Let's get back to work.")
 
     def home(self):
         msg = Vector3()
         msg.x = 1.0
+        msg.y = 0.0
+        self.robot_control.publish(msg)
+
+    def home_for_retract(self):
+        msg = Vector3()
+        msg.x = 2.0
         msg.y = 0.0
         self.robot_control.publish(msg)
 
