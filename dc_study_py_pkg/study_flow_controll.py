@@ -186,66 +186,81 @@ class SimStudyController(Node):
             self.is_recording = False
             self.trial_ready = False  # Reset the flag after the trial is done
             self.trial_end = False
-
     async def run_trial_block(self, state, trial_num):
-        while not self.trial_ready:
-            await asyncio.sleep(0.1)  # Asynchronous wait
+        """
+        Runs a single trial block consisting of reaching and retract phases.
+        Args:
+            state (str): The phase of the trial (e.g., 'practice', 'baseline', etc.).
+            trial_num (int): The trial number within the block.
+        """
+        # Wait until the trial is ready
+        await self.wait_for_trial_ready()
 
-        trial_conditions = self.get_trial_conditions(
-            self.conditions_json, trial_num, state)
-        if trial_conditions:
-            delay = trial_conditions['delay']
-            distance = trial_conditions['distance']
-            direction = trial_conditions['direction']
+        # Retrieve trial conditions
+        trial_conditions = self.get_trial_conditions(self.conditions_json, trial_num, state)
+        if not trial_conditions:
+            print(f"Error: No trial conditions found for trial {trial_num} in {state} phase.")
+            return
 
-            print(
-                f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
-            ''' 
-            Reaching Phase 
-            '''
-            while not self.trial_ready:
-                await asyncio.sleep(0.1)  # Asynchronous wait
+        delay = trial_conditions['delay']
+        distance = trial_conditions['distance']
+        direction = trial_conditions['direction']
+
+        print(
+            f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
+
+        # Reaching Phase
+        await self.run_phase("Reaching", delay, distance, direction)
+
+        # Retract Phase
+        await self.run_phase("Retract", delay, distance, direction)
+
+        # Finalize the trial and handle breaks
+        self.trials_completed = trial_num
+        self.blocks_completed = trial_num // 5
+        if self.blocks_completed % 10 == 0 and self.trials_completed % 50 == 0:
+            self.test_break()
+        self.is_recording = False
+
+
+    async def run_phase(self, phase_name, delay, distance, direction):
+        """
+        Runs a single phase of a trial (e.g., Reaching or Retract).
+        Args:
+            phase_name (str): Name of the phase ('Reaching' or 'Retract').
+            delay (float): Delay parameter for the trial.
+            distance (float): Distance parameter for the trial.
+            direction (float): Direction parameter for the trial.
+        """
+        await self.wait_for_trial_ready()
+
+        # Initialize the phase
+        if phase_name == "Reaching":
             self.home()
             self.generate_target(distance, direction)
-            self.alternate_delay_param(delay)
-            self.count_down()
-            print("Pleas go to target")
-            self.allow_user_go()
-            self.counter_end = False
-
-            while not self.trial_end:
-                await asyncio.sleep(0.1)
-            print(f"Reaching Trial {trial_num} complete.")
-            self.trial_ready = False
-            self.trial_end = False
-            ''' 
-            Retract Phase 
-            '''
-            while not self.trial_ready:
-                await asyncio.sleep(0.1)  # Asynchronous wait
-            # self.generate_target(distance, direction)
-            # self.alternate_delay_param(delay)
-            # We generate the reaching target in sim and keep the delay param
+        elif phase_name == "Retract":
             self.home_for_retract()
-            self.count_down()
-            print("Pleas go to target")
-            self.allow_user_go()
-            self.counter_end = False
 
-            self.log_state()
-            while not self.trial_end:
-                await asyncio.sleep(0.1)
-            print(f"Retract Trial {trial_num} complete.")
-            self.trial_ready = False
-            self.trial_end = False
+        self.alternate_delay_param(delay)
+        self.count_down()
+        print(f"Please go to target ({phase_name} phase).")
+        self.allow_user_go()
+        self.counter_end = False
 
-            # Params reset for next condition
-            self.trials_completed = trial_num
-            self.blocks_completed = trial_num // 5
-            if self.blocks_completed == 10 and self.trials_completed == 50:
-                self.test_break()
-            self.is_recording = False
+        # Wait until the trial ends
+        while not self.trial_end:
+            await asyncio.sleep(0.1)
 
+        print(f"{phase_name} Phase completed.")
+        self.trial_ready = False
+        self.trial_end = False
+        self.log_state()
+
+
+    async def wait_for_trial_ready(self):
+        """Waits asynchronously until the trial is ready to start."""
+        while not self.trial_ready:
+            await asyncio.sleep(0.1)
 
     def get_trial_conditions(self, file_path, trial_num, state):
         with open(file_path, 'r') as json_file:
