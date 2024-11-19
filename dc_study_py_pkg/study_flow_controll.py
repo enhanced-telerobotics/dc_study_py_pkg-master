@@ -157,35 +157,25 @@ class SimStudyController(Node):
 
     async def run_trial_single(self, state, trial_num):
         # Wait until trial_ready is True
-        while not self.trial_ready:
-            await asyncio.sleep(0.1)  # Asynchronous wait
+        await self.wait_for_trial_ready()
 
         trial_conditions = self.get_trial_conditions(
             self.conditions_json, trial_num, state)
+        
         if trial_conditions:
             delay = trial_conditions['delay']
             distance = trial_conditions['distance']
             direction = trial_conditions['direction']
+            # Reaching Phase
+            await self.run_phase("Reaching", delay, distance, direction)
 
-            print(
-                f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
-            self.home()
-            while not self.trial_ready:
-                await asyncio.sleep(0.1)  # Asynchronous wait
-            self.generate_target(distance, direction)
-            self.count_down()
-            print("Pleas go to target")
-            self.allow_user_go()
-            self.counter_end = False
+            # Retract Phase
+            await self.run_phase("Retract", delay, distance, direction)
 
-            self.log_state()
-            while not self.trial_end:
-                await asyncio.sleep(0.1)
-            print(f"Trial {trial_num} complete.")
+            # Finalize the trial and handle breaks
             self.trials_completed = trial_num
             self.is_recording = False
-            self.trial_ready = False  # Reset the flag after the trial is done
-            self.trial_end = False
+
     async def run_trial_block(self, state, trial_num):
         """
         Runs a single trial block consisting of reaching and retract phases.
@@ -280,20 +270,41 @@ class SimStudyController(Node):
         else:
             print(f"Trial number {trial_num} not found in {state} phase.")
             return None
-
+    # Old HOLD and RELEASE method
+    # def btn_cb(self, msg):
+    #     if msg.buttons is not None:
+    #         self.btn_curr_state = msg.buttons[3] == 1
+    #         if self.btn_curr_state and not self.btn_last_state:
+    #             self.get_logger().info("Button pressed! Please hold till you finished this run..")
+    #             self.trial_ready = True
+    #         elif not self.btn_curr_state and self.btn_last_state:
+    #             r_msg = Vector3()
+    #             r_msg.x = 0.0
+    #             r_msg.z = 1.0
+    #             self.robot_control.publish(r_msg)
+    #             self.trial_end = True
+    #         self.btn_last_state = self.btn_curr_state
     def btn_cb(self, msg):
         if msg.buttons is not None:
             self.btn_curr_state = msg.buttons[3] == 1
+            
+            # Detect button press (transition from not pressed to pressed)
             if self.btn_curr_state and not self.btn_last_state:
-                self.get_logger().info("Button pressed! Please hold till you finished this run..")
-                self.trial_ready = True
-            elif not self.btn_curr_state and self.btn_last_state:
-                r_msg = Vector3()
-                r_msg.x = 0.0
-                r_msg.z = 1.0
-                self.robot_control.publish(r_msg)
-                self.trial_end = True
-            self.btn_last_state = self.btn_curr_state
+                if not self.trial_ready:  # Toggle to start the trial
+                    self.get_logger().info("Button pressed! Please hold till you finish this run.")
+                    self.trial_ready = True
+                    self.trial_end = False
+                else:  # Toggle to end the trial
+                    r_msg = Vector3()
+                    r_msg.x = 0.0
+                    r_msg.z = 1.0
+                    self.robot_control.publish(r_msg)
+                    self.trial_ready = False
+                    self.trial_end = True
+                    self.get_logger().info("Trial ended!")
+        
+        # Update the last state
+        self.btn_last_state = self.btn_curr_state
 
     def count_down(self):
         if not self.counter_end:

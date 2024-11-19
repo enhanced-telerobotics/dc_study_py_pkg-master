@@ -2,25 +2,25 @@
     "practice": [
         {
             "trial_num": 1,
-            "delay": 100,
+            "delay": 0,
             "distance": 0.01,
             "direction": "diag"
         },
         {
             "trial_num": 2,
-            "delay": 400,
+            "delay": 0,
             "distance": 0.01,
             "direction": "up"
         },
         {
             "trial_num": 3,
-            "delay": 400,
+            "delay": 100,
             "distance": 0.05,
             "direction": "up"
         },
         {
             "trial_num": 4,
-            "delay": 400,
+            "delay": 700,
             "distance": 0.05,
             "direction": "right"
         },
