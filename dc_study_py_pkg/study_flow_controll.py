@@ -38,7 +38,7 @@ class SimStudyController(Node):
         }
 
         # Button subscription for user interaction
-        self.btn_sub = self.create_subscription(Joy, 'joy', self.btn_cb, 10)
+        self.btn_sub = self.create_subscription(Joy, 'delayed_button', self.btn_cb, 10)
         self.btn_curr_state = False
         self.btn_last_state = False
 
@@ -88,20 +88,21 @@ class SimStudyController(Node):
                 msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w
             ])
 
-    async def save_to_csv(self):
+    async def save_to_csv(self, phase_name):
         try:
             with open(self.data_csv, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
                 if csvfile.tell() == 0:
                     csv_writer.writerow([
-                        'Timestamp', 'State', 'Trial Number', 'Delay', 'Distance', 'Direction',
+                        'Timestamp', 'State', 'Trial Number', 'Phase', 'Delay', 'Distance', 'Direction',
                         'P_x', 'P_y', 'P_z', 'O_x', 'O_y', 'O_z', 'O_w'
                     ])
 
                 while self.is_recording:
                     # Write accumulated data to CSV and clear buffer
                     if self.pose_data_buffer:
-                        csv_writer.writerows(self.pose_data_buffer)
+                        updated_buffer = [row[:3] + [phase_name] + row[3:] for row in self.pose_data_buffer]
+                        csv_writer.writerows(updated_buffer)
                         self.pose_data_buffer.clear()
 
                     # Wait for a small interval before checking the buffer again
@@ -234,13 +235,13 @@ class SimStudyController(Node):
         self.alternate_delay_param(delay)
         self.count_down()
         print(f"Please go to target ({phase_name} phase).")
-        self.allow_user_go()
+        self.allow_user_go(phase_name)
         self.counter_end = False
 
         # Wait until the trial ends
         while not self.trial_end:
             await asyncio.sleep(0.1)
-
+        self.alternate_delay_param(0)
         print(f"{phase_name} Phase completed.")
         self.trial_ready = False
         self.trial_end = False
@@ -320,14 +321,14 @@ class SimStudyController(Node):
             self.counter_control.publish(msg)
             self.counter_end = True
 
-    def allow_user_go(self):
+    def allow_user_go(self, phase_name):
         msg = Vector3()
         msg.x = 0.0
         msg.y = 1.0
         self.robot_control.publish(msg)
         self.is_recording = True
         print("Pose recording started.")
-        asyncio.create_task(self.save_to_csv())
+        asyncio.create_task(self.save_to_csv(phase_name))
 
     def test_break(self):
         # Clear the terminal for better visibility
