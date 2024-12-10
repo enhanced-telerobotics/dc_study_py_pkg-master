@@ -26,6 +26,7 @@ class SimStudyController(Node):
             os.path.dirname(__file__), 'trial_pose_data.csv')
 
         # Initialize current state and study phases
+        self.trials_phase = 'Reaching'
         self.current_state = 'practice'
         self.study_state = ['practice', 'baseline',
                             'training_task', 'evaluation']
@@ -38,7 +39,7 @@ class SimStudyController(Node):
         }
 
         # Button subscription for user interaction
-        self.btn_sub = self.create_subscription(Joy, 'joy', self.btn_cb, 10)
+        self.btn_sub = self.create_subscription(Joy, 'delayed_button', self.btn_cb, 10)
         self.btn_curr_state = False
         self.btn_last_state = False
 
@@ -81,6 +82,7 @@ class SimStudyController(Node):
                 timestamp,
                 self.current_state,  # Add current state
                 self.trials_completed + 1,  # Current trial number
+                self.trials_phase,
                 self.current_conditions['delay'],  # Delay condition
                 self.current_conditions['distance'],  # Distance condition
                 self.current_conditions['direction'],  # Direction condition
@@ -94,7 +96,7 @@ class SimStudyController(Node):
                 csv_writer = csv.writer(csvfile)
                 if csvfile.tell() == 0:
                     csv_writer.writerow([
-                        'Timestamp', 'State', 'Trial Number', 'Delay', 'Distance', 'Direction',
+                        'Timestamp', 'State', 'Trial Number', 'Phase', 'Delay', 'Distance', 'Direction',
                         'P_x', 'P_y', 'P_z', 'O_x', 'O_y', 'O_z', 'O_w'
                     ])
 
@@ -157,35 +159,26 @@ class SimStudyController(Node):
 
     async def run_trial_single(self, state, trial_num):
         # Wait until trial_ready is True
-        while not self.trial_ready:
-            await asyncio.sleep(0.1)  # Asynchronous wait
+        await self.wait_for_trial_ready()
 
         trial_conditions = self.get_trial_conditions(
             self.conditions_json, trial_num, state)
+        
         if trial_conditions:
             delay = trial_conditions['delay']
             distance = trial_conditions['distance']
             direction = trial_conditions['direction']
+            # Reaching Phase
+            self.trials_phase = "Reaching"
+            await self.run_phase("Reaching", delay, distance, direction)
+            self.trials_phase = "Retract"
+            # Retract Phase
+            await self.run_phase("Retract", delay, distance, direction)
 
-            print(
-                f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
-            self.home()
-            while not self.trial_ready:
-                await asyncio.sleep(0.1)  # Asynchronous wait
-            self.generate_target(distance, direction)
-            self.count_down()
-            print("Pleas go to target")
-            self.allow_user_go()
-            self.counter_end = False
-
-            self.log_state()
-            while not self.trial_end:
-                await asyncio.sleep(0.1)
-            print(f"Trial {trial_num} complete.")
+            # Finalize the trial and handle breaks
             self.trials_completed = trial_num
             self.is_recording = False
-            self.trial_ready = False  # Reset the flag after the trial is done
-            self.trial_end = False
+
     async def run_trial_block(self, state, trial_num):
         """
         Runs a single trial block consisting of reaching and retract phases.
@@ -210,8 +203,9 @@ class SimStudyController(Node):
             f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
 
         # Reaching Phase
+        self.trials_phase = "Reaching"
         await self.run_phase("Reaching", delay, distance, direction)
-
+        self.trials_phase = "Retract"
         # Retract Phase
         await self.run_phase("Retract", delay, distance, direction)
 
@@ -233,7 +227,7 @@ class SimStudyController(Node):
             direction (float): Direction parameter for the trial.
         """
         await self.wait_for_trial_ready()
-
+        
         # Initialize the phase
         if phase_name == "Reaching":
             self.home()
@@ -250,7 +244,7 @@ class SimStudyController(Node):
         # Wait until the trial ends
         while not self.trial_end:
             await asyncio.sleep(0.1)
-
+        self.alternate_delay_param(0)
         print(f"{phase_name} Phase completed.")
         self.trial_ready = False
         self.trial_end = False
@@ -280,20 +274,41 @@ class SimStudyController(Node):
         else:
             print(f"Trial number {trial_num} not found in {state} phase.")
             return None
-
+    # Old HOLD and RELEASE method
+    # def btn_cb(self, msg):
+    #     if msg.buttons is not None:
+    #         self.btn_curr_state = msg.buttons[3] == 1
+    #         if self.btn_curr_state and not self.btn_last_state:
+    #             self.get_logger().info("Button pressed! Please hold till you finished this run..")
+    #             self.trial_ready = True
+    #         elif not self.btn_curr_state and self.btn_last_state:
+    #             r_msg = Vector3()
+    #             r_msg.x = 0.0
+    #             r_msg.z = 1.0
+    #             self.robot_control.publish(r_msg)
+    #             self.trial_end = True
+    #         self.btn_last_state = self.btn_curr_state
     def btn_cb(self, msg):
         if msg.buttons is not None:
-            self.btn_curr_state = msg.buttons[3] == 1
+            self.btn_curr_state = msg.buttons[6] == 1
+            
+            # Detect button press (transition from not pressed to pressed)
             if self.btn_curr_state and not self.btn_last_state:
-                self.get_logger().info("Button pressed! Please hold till you finished this run..")
-                self.trial_ready = True
-            elif not self.btn_curr_state and self.btn_last_state:
-                r_msg = Vector3()
-                r_msg.x = 0.0
-                r_msg.z = 1.0
-                self.robot_control.publish(r_msg)
-                self.trial_end = True
-            self.btn_last_state = self.btn_curr_state
+                if not self.trial_ready:  # Toggle to start the trial
+                    self.get_logger().info("Button pressed! Please hold till you finish this run.")
+                    self.trial_ready = True
+                    self.trial_end = False
+                else:  # Toggle to end the trial
+                    r_msg = Vector3()
+                    r_msg.x = 0.0
+                    r_msg.z = 1.0
+                    self.robot_control.publish(r_msg)
+                    self.trial_ready = False
+                    self.trial_end = True
+                    self.get_logger().info("Trial ended!")
+        
+        # Update the last state
+        self.btn_last_state = self.btn_curr_state
 
     def count_down(self):
         if not self.counter_end:
@@ -303,7 +318,7 @@ class SimStudyController(Node):
             print("Starting countdown:")
             for i in range(3, 0, -1):
                 print(str(i) + "...")
-                time.sleep(1)
+                time.sleep(0.6)
             print("Countdown complete!")
             msg.data = False
             self.counter_control.publish(msg)

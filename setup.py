@@ -21,7 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
         'state_machine = dc_study_py_pkg.study_flow_controll:main',
-        'vr_display = dc_study_py_pkg.image_stitcher:main',
+        'vr_display = dc_study_py_pkg.image_disp:main',
         ],
     },
 )
