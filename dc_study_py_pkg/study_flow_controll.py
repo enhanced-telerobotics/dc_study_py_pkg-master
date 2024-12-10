@@ -26,6 +26,7 @@ class SimStudyController(Node):
             os.path.dirname(__file__), 'trial_pose_data.csv')
 
         # Initialize current state and study phases
+        self.trials_phase = 'Reaching'
         self.current_state = 'practice'
         self.study_state = ['practice', 'baseline',
                             'training_task', 'evaluation']
@@ -81,6 +82,7 @@ class SimStudyController(Node):
                 timestamp,
                 self.current_state,  # Add current state
                 self.trials_completed + 1,  # Current trial number
+                self.trials_phase,
                 self.current_conditions['delay'],  # Delay condition
                 self.current_conditions['distance'],  # Distance condition
                 self.current_conditions['direction'],  # Direction condition
@@ -88,7 +90,7 @@ class SimStudyController(Node):
                 msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w
             ])
 
-    async def save_to_csv(self, phase_name):
+    async def save_to_csv(self):
         try:
             with open(self.data_csv, 'a', newline='') as csvfile:
                 csv_writer = csv.writer(csvfile)
@@ -101,8 +103,7 @@ class SimStudyController(Node):
                 while self.is_recording:
                     # Write accumulated data to CSV and clear buffer
                     if self.pose_data_buffer:
-                        updated_buffer = [row[:3] + [phase_name] + row[3:] for row in self.pose_data_buffer]
-                        csv_writer.writerows(updated_buffer)
+                        csv_writer.writerows(self.pose_data_buffer)
                         self.pose_data_buffer.clear()
 
                     # Wait for a small interval before checking the buffer again
@@ -168,8 +169,9 @@ class SimStudyController(Node):
             distance = trial_conditions['distance']
             direction = trial_conditions['direction']
             # Reaching Phase
+            self.trials_phase = "Reaching"
             await self.run_phase("Reaching", delay, distance, direction)
-
+            self.trials_phase = "Retract"
             # Retract Phase
             await self.run_phase("Retract", delay, distance, direction)
 
@@ -201,8 +203,9 @@ class SimStudyController(Node):
             f"Starting trial {trial_num} in {state} phase with delay: {delay}, distance: {distance}, direction: {direction}")
 
         # Reaching Phase
+        self.trials_phase = "Reaching"
         await self.run_phase("Reaching", delay, distance, direction)
-
+        self.trials_phase = "Retract"
         # Retract Phase
         await self.run_phase("Retract", delay, distance, direction)
 
@@ -224,7 +227,7 @@ class SimStudyController(Node):
             direction (float): Direction parameter for the trial.
         """
         await self.wait_for_trial_ready()
-
+        
         # Initialize the phase
         if phase_name == "Reaching":
             self.home()
@@ -235,7 +238,7 @@ class SimStudyController(Node):
         self.alternate_delay_param(delay)
         self.count_down()
         print(f"Please go to target ({phase_name} phase).")
-        self.allow_user_go(phase_name)
+        self.allow_user_go()
         self.counter_end = False
 
         # Wait until the trial ends
@@ -287,7 +290,7 @@ class SimStudyController(Node):
     #         self.btn_last_state = self.btn_curr_state
     def btn_cb(self, msg):
         if msg.buttons is not None:
-            self.btn_curr_state = msg.buttons[3] == 1
+            self.btn_curr_state = msg.buttons[6] == 1
             
             # Detect button press (transition from not pressed to pressed)
             if self.btn_curr_state and not self.btn_last_state:
@@ -315,20 +318,20 @@ class SimStudyController(Node):
             print("Starting countdown:")
             for i in range(3, 0, -1):
                 print(str(i) + "...")
-                time.sleep(1)
+                time.sleep(0.6)
             print("Countdown complete!")
             msg.data = False
             self.counter_control.publish(msg)
             self.counter_end = True
 
-    def allow_user_go(self, phase_name):
+    def allow_user_go(self):
         msg = Vector3()
         msg.x = 0.0
         msg.y = 1.0
         self.robot_control.publish(msg)
         self.is_recording = True
         print("Pose recording started.")
-        asyncio.create_task(self.save_to_csv(phase_name))
+        asyncio.create_task(self.save_to_csv())
 
     def test_break(self):
         # Clear the terminal for better visibility
