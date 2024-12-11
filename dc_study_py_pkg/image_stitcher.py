@@ -32,34 +32,43 @@ class ImageStitcher(Node):
             10
         )
 
-        # Initialize image placeholders
-        self.image_L = None
-        self.image_R = None
+        # Dictionaries to store images and timestamps based on frame_id
+        self.image_L_dict = {}
+        self.image_R_dict = {}
 
     def image_L_cb(self, msg):
-        # Convert ROS Image message to OpenCV image
-        self.image_L = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
-        self.image_L = cv2.rotate(self.image_L, cv2.ROTATE_180)
-        self.image_L = cv2.flip(self.image_L, 1)
-        self.stitch_and_publish()
+        # Store the left image based on frame_id
+        frame_id = msg.header.frame_id
+        self.image_L_dict[frame_id] = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
+        self.try_stitch_and_publish(frame_id)
 
     def image_R_cb(self, msg):
-        # Convert ROS Image message to OpenCV image
-        self.image_R = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
-        self.image_R = cv2.rotate(self.image_R, cv2.ROTATE_180)
-        self.image_R = cv2.flip(self.image_R, 1)
-        self.stitch_and_publish()
+        # Store the right image based on frame_id
+        frame_id = msg.header.frame_id
+        self.image_R_dict[frame_id] = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
+        self.try_stitch_and_publish(frame_id)
 
-    def stitch_and_publish(self):
-        # Only proceed if both images are available
-        if self.image_L is not None and self.image_R is not None:
+    def try_stitch_and_publish(self, frame_id):
+        # Check if both images for the same frame_id are available
+        if frame_id in self.image_L_dict and frame_id in self.image_R_dict:
+            # Get the images
+            image_L = self.image_L_dict.pop(frame_id)
+            image_R = self.image_R_dict.pop(frame_id)
+
+            # Process the images (e.g., rotation or flipping if necessary)
+            image_L = cv2.rotate(image_L, cv2.ROTATE_180)
+            image_L = cv2.flip(image_L, 1)
+            image_R = cv2.rotate(image_R, cv2.ROTATE_180)
+            image_R = cv2.flip(image_R, 1)
+
             # Stitch images horizontally
-            stitched_image = np.hstack((self.image_L, self.image_R))
+            stitched_image = np.hstack((image_L, image_R))
+            stitched_image = cv2.resize(stitched_image, (1920, 1080))
 
             # Convert stitched image back to ROS Image message
             stitched_msg = self.bridge.cv2_to_imgmsg(stitched_image, 'rgb8')
-
-            # Publish the stitched image
+            stitched_msg.header.frame_id = frame_id  # Use the same frame_id
+            stitched_msg.header.stamp = self.get_clock().now().to_msg()  # Use the current time
             self.stitched_pub.publish(stitched_msg)
 
 def main(args=None):

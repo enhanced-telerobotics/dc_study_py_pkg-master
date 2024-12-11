@@ -21,10 +21,8 @@ class ImageStitchAndDisplayNode(Node):
             Image, '/cop_vision_right', self.image_R_cb, 10
         )
 
-        # Image placeholders
-        self.image_L = None
-        self.image_R = None
-        self.stitched_image = None
+        # Dictionary to store images by frame_id
+        self.images = {}
 
         # Display thread
         self.display_thread = threading.Thread(target=self.display_loop, daemon=True)
@@ -32,28 +30,54 @@ class ImageStitchAndDisplayNode(Node):
 
     def image_L_cb(self, msg):
         try:
-            self.image_L = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
-            self.image_L = cv2.rotate(self.image_L, cv2.ROTATE_180)
-            self.image_L = cv2.flip(self.image_L, 1)
-            self.stitch_images()
+            frame_id = msg.header.frame_id
+            image = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
+            image = cv2.rotate(image, cv2.ROTATE_180)
+            image = cv2.flip(image, 1)
+
+            # Store the left image with its frame_id
+            if frame_id not in self.images:
+                self.images[frame_id] = {'left': image}
+            else:
+                self.images[frame_id]['left'] = image
+
+            self.stitch_images(frame_id)
         except Exception as e:
             self.get_logger().error(f"Error in left image callback: {e}")
 
     def image_R_cb(self, msg):
         try:
-            self.image_R = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
-            self.image_R = cv2.rotate(self.image_R, cv2.ROTATE_180)
-            self.image_R = cv2.flip(self.image_R, 1)
-            self.stitch_images()
+            frame_id = msg.header.frame_id
+            image = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
+            image = cv2.rotate(image, cv2.ROTATE_180)
+            image = cv2.flip(image, 1)
+
+            # Store the right image with its frame_id
+            if frame_id not in self.images:
+                self.images[frame_id] = {'right': image}
+            else:
+                self.images[frame_id]['right'] = image
+
+            self.stitch_images(frame_id)
         except Exception as e:
             self.get_logger().error(f"Error in right image callback: {e}")
 
-    def stitch_images(self):
-        if self.image_L is not None and self.image_R is not None:
+    def stitch_images(self, frame_id):
+        # Proceed only if both left and right images for the same frame_id are available
+        if frame_id in self.images and 'left' in self.images[frame_id] and 'right' in self.images[frame_id]:
             try:
+                image_L = self.images[frame_id]['left']
+                image_R = self.images[frame_id]['right']
+
                 # Stitch images
-                stitched = np.hstack((self.image_L, self.image_R))
-                self.stitched_image = cv2.resize(stitched, (1920, 1080))
+                stitched = np.hstack((image_L, image_R))
+                stitched_image = cv2.resize(stitched, (1920, 1080))
+
+                # Display the stitched image
+                self.stitched_image = stitched_image
+
+                # Clean up to save memory
+                del self.images[frame_id]
             except Exception as e:
                 self.get_logger().error(f"Error during stitching: {e}")
 
@@ -62,7 +86,7 @@ class ImageStitchAndDisplayNode(Node):
         fullscreen = False
 
         while rclpy.ok():
-            if self.stitched_image is not None:
+            if hasattr(self, 'stitched_image') and self.stitched_image is not None:
                 cv2.imshow('Stitched Image', self.stitched_image)
 
             key = cv2.waitKey(1) & 0xFF
