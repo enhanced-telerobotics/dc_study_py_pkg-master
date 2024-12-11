@@ -316,9 +316,10 @@ class SimStudyController(Node):
             msg.data = True
             self.counter_control.publish(msg)
             print("Starting countdown:")
-            for i in range(3, 0, -1):
-                print(str(i) + "...")
-                time.sleep(0.6)
+            # for i in range(3, 0, -1):
+            #     print(str(i) + "...")
+            #     time.sleep(0.6)
+            time.sleep(1)
             print("Countdown complete!")
             msg.data = False
             self.counter_control.publish(msg)

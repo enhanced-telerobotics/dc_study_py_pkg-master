@@ -11,7 +11,8 @@ sim.setStepping(True)
 # Get handles for both vision sensors
 endscope_L = sim.getObject('/Vision_sensor_left')
 endscope_R = sim.getObject('/Vision_sensor_right')
-
+robot=sim.getObject('/ee_offset_PSM1')
+home = [-1.475, 0, 0.75, 0, np.sqrt(0.5), 0, np.sqrt(0.5)]
 # Setup OpenCV window
 window_name = 'HStack Vision Sensors'
 cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
@@ -19,6 +20,7 @@ cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
 fullscreen = False  # Variable to track fullscreen state
 
 sim.startSimulation()
+
 try:
     while True:
         # Get images from both sensors
@@ -55,6 +57,8 @@ try:
                 cv2.WND_PROP_FULLSCREEN,
                 cv2.WINDOW_FULLSCREEN if fullscreen else cv2.WINDOW_NORMAL
             )
+        if key == ord('r'):
+            sim.setObjectPose(robot, home, -1)
         elif key == 27:  # ESC key to exit
             break
 
