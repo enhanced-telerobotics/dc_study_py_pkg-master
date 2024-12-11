@@ -4,7 +4,7 @@ from itertools import product
 # Define the values for delay, distance, and direction
 delay_values = [100, 400, 700]  # For real trials
 zero_delay = 0  # For catch trials
-dist_values = [0.01, 0.03, 0.05]
+dist_values = [0.005, 0.01, 0.015]
 dir_values = ['up', 'right', 'diag']
 
 # Number of blocks for the real task
