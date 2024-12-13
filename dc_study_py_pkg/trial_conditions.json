@@ -3,31 +3,31 @@
         {
             "trial_num": 1,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "diag"
         },
         {
             "trial_num": 2,
             "delay": 0,
             "distance": 0.01,
-            "direction": "up"
+            "direction": "right"
         },
         {
             "trial_num": 3,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "up"
+            "delay": 400,
+            "distance": 0.005,
+            "direction": "diag"
         },
         {
             "trial_num": 4,
             "delay": 700,
-            "distance": 0.05,
-            "direction": "right"
+            "distance": 0.015,
+            "direction": "diag"
         },
         {
             "trial_num": 5,
-            "delay": 400,
-            "distance": 0.05,
+            "delay": 100,
+            "distance": 0.01,
             "direction": "up"
         }
     ],
@@ -35,262 +35,262 @@
         {
             "trial_num": 1,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "up"
         },
         {
             "trial_num": 2,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "right"
         },
         {
             "trial_num": 3,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "diag"
         },
         {
             "trial_num": 4,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "up"
         },
         {
             "trial_num": 5,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "right"
         },
         {
             "trial_num": 6,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "diag"
         },
         {
             "trial_num": 7,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "up"
         },
         {
             "trial_num": 8,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "right"
         },
         {
             "trial_num": 9,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "diag"
         },
         {
             "trial_num": 10,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "up"
         },
         {
             "trial_num": 11,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "right"
         },
         {
             "trial_num": 12,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "diag"
         },
         {
             "trial_num": 13,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "up"
         },
         {
             "trial_num": 14,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "right"
         },
         {
             "trial_num": 15,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "diag"
         },
         {
             "trial_num": 16,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "up"
         },
         {
             "trial_num": 17,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "right"
         },
         {
             "trial_num": 18,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "diag"
         },
         {
             "trial_num": 19,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "up"
         },
         {
             "trial_num": 20,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "right"
         },
         {
             "trial_num": 21,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.005,
             "direction": "diag"
         },
         {
             "trial_num": 22,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "up"
         },
         {
             "trial_num": 23,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "right"
         },
         {
             "trial_num": 24,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "diag"
         },
         {
             "trial_num": 25,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "up"
         },
         {
             "trial_num": 26,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "right"
         },
         {
             "trial_num": 27,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "diag"
         }
     ],
     "training_task": [
         {
             "block_num": 1,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 1
         },
         {
             "block_num": 1,
-            "delay": 700,
-            "distance": 0.01,
+            "delay": 0,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 2
         },
         {
             "block_num": 1,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 3
         },
         {
             "block_num": 1,
-            "delay": 700,
+            "delay": 0,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "up",
             "trial_num": 4
         },
         {
             "block_num": 1,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 5
         },
         {
             "block_num": 2,
-            "delay": 400,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.015,
             "direction": "up",
             "trial_num": 6
         },
         {
             "block_num": 2,
-            "delay": 700,
-            "distance": 0.05,
+            "delay": 100,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 7
         },
         {
             "block_num": 2,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 8
         },
         {
             "block_num": 2,
             "delay": 400,
-            "distance": 0.01,
-            "direction": "diag",
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 9
         },
         {
             "block_num": 2,
             "delay": 0,
-            "distance": 0.01,
-            "direction": "diag",
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 10
         },
         {
             "block_num": 3,
             "delay": 400,
             "distance": 0.01,
-            "direction": "up",
+            "direction": "diag",
             "trial_num": 11
         },
         {
             "block_num": 3,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "up",
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 12
         },
         {
             "block_num": 3,
-            "delay": 700,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 13
         },
         {
             "block_num": 3,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 14
         },
@@ -298,376 +298,376 @@
             "block_num": 3,
             "delay": 100,
             "distance": 0.01,
-            "direction": "diag",
+            "direction": "up",
             "trial_num": 15
         },
         {
             "block_num": 4,
             "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 16
         },
         {
             "block_num": 4,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "up",
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 17
         },
         {
             "block_num": 4,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 18
         },
         {
             "block_num": 4,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 19
         },
         {
             "block_num": 4,
             "delay": 700,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 20
         },
         {
             "block_num": 5,
-            "delay": 0,
+            "delay": 100,
             "distance": 0.01,
-            "direction": "diag",
+            "direction": "up",
             "trial_num": 21
         },
         {
             "block_num": 5,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "up",
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 22
         },
         {
             "block_num": 5,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 23
         },
         {
             "block_num": 5,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 24
         },
         {
             "block_num": 5,
-            "delay": 700,
-            "distance": 0.01,
+            "delay": 400,
+            "distance": 0.015,
             "direction": "up",
             "trial_num": 25
         },
         {
             "block_num": 6,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 26
         },
         {
             "block_num": 6,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 27
         },
         {
             "block_num": 6,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 400,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 28
         },
         {
             "block_num": 6,
             "delay": 700,
-            "distance": 0.03,
-            "direction": "up",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 29
         },
         {
             "block_num": 6,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 30
         },
         {
             "block_num": 7,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 31
         },
         {
             "block_num": 7,
-            "delay": 400,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 32
         },
         {
             "block_num": 7,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 33
         },
         {
             "block_num": 7,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 34
         },
         {
             "block_num": 7,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 35
         },
         {
             "block_num": 8,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.015,
             "direction": "up",
             "trial_num": 36
         },
         {
             "block_num": 8,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 37
         },
         {
             "block_num": 8,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 38
         },
         {
             "block_num": 8,
             "delay": 0,
-            "distance": 0.01,
+            "distance": 0.015,
             "direction": "up",
             "trial_num": 39
         },
         {
             "block_num": 8,
-            "delay": 700,
-            "distance": 0.01,
+            "delay": 400,
+            "distance": 0.015,
             "direction": "right",
             "trial_num": 40
         },
         {
             "block_num": 9,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 41
         },
         {
             "block_num": 9,
             "delay": 400,
-            "distance": 0.01,
-            "direction": "up",
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 42
         },
         {
             "block_num": 9,
-            "delay": 100,
-            "distance": 0.01,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 43
         },
         {
             "block_num": 9,
-            "delay": 0,
+            "delay": 700,
             "distance": 0.01,
-            "direction": "up",
+            "direction": "diag",
             "trial_num": 44
         },
         {
             "block_num": 9,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 45
         },
         {
             "block_num": 10,
             "delay": 400,
             "distance": 0.01,
-            "direction": "diag",
+            "direction": "up",
             "trial_num": 46
         },
         {
             "block_num": 10,
-            "delay": 0,
+            "delay": 100,
             "distance": 0.01,
             "direction": "right",
             "trial_num": 47
         },
         {
             "block_num": 10,
-            "delay": 100,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 48
         },
         {
             "block_num": 10,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 49
         },
         {
             "block_num": 10,
-            "delay": 700,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 50
         },
         {
             "block_num": 11,
-            "delay": 100,
-            "distance": 0.03,
+            "delay": 0,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 51
         },
         {
             "block_num": 11,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 52
         },
         {
             "block_num": 11,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 53
         },
         {
             "block_num": 11,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 54
         },
         {
             "block_num": 11,
-            "delay": 0,
+            "delay": 700,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "diag",
             "trial_num": 55
         },
         {
             "block_num": 12,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 56
         },
         {
             "block_num": 12,
             "delay": 700,
-            "distance": 0.05,
-            "direction": "diag",
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 57
         },
         {
             "block_num": 12,
-            "delay": 400,
-            "distance": 0.01,
+            "delay": 0,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 58
         },
         {
             "block_num": 12,
-            "delay": 700,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 59
         },
         {
             "block_num": 12,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 60
         },
         {
             "block_num": 13,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 61
         },
         {
             "block_num": 13,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.01,
             "direction": "up",
             "trial_num": 62
         },
         {
             "block_num": 13,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 63
         },
         {
             "block_num": 13,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 64
         },
         {
             "block_num": 13,
-            "delay": 100,
-            "distance": 0.01,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 65
         },
         {
             "block_num": 14,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 66
         },
         {
             "block_num": 14,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 67
         },
         {
             "block_num": 14,
-            "delay": 0,
+            "delay": 700,
             "distance": 0.01,
             "direction": "diag",
             "trial_num": 68
@@ -675,118 +675,118 @@
         {
             "block_num": 14,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 69
         },
         {
             "block_num": 14,
-            "delay": 700,
+            "delay": 400,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "up",
             "trial_num": 70
         },
         {
             "block_num": 15,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 71
         },
         {
             "block_num": 15,
-            "delay": 700,
+            "delay": 0,
             "distance": 0.01,
-            "direction": "up",
+            "direction": "right",
             "trial_num": 72
         },
         {
             "block_num": 15,
             "delay": 100,
-            "distance": 0.03,
-            "direction": "right",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 73
         },
         {
             "block_num": 15,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 74
         },
         {
             "block_num": 15,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 75
         },
         {
             "block_num": 16,
-            "delay": 0,
-            "distance": 0.05,
+            "delay": 400,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 76
         },
         {
             "block_num": 16,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 77
         },
         {
             "block_num": 16,
-            "delay": 400,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 78
         },
         {
             "block_num": 16,
             "delay": 700,
-            "distance": 0.03,
-            "direction": "right",
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 79
         },
         {
             "block_num": 16,
             "delay": 0,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "diag",
             "trial_num": 80
         },
         {
             "block_num": 17,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 81
+        },
+        {
+            "block_num": 17,
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "right",
+            "trial_num": 82
         },
         {
             "block_num": 17,
             "delay": 100,
             "distance": 0.01,
-            "direction": "diag",
-            "trial_num": 82
-        },
-        {
-            "block_num": 17,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "direction": "up",
             "trial_num": 83
         },
         {
             "block_num": 17,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.01,
             "direction": "diag",
             "trial_num": 84
         },
         {
             "block_num": 17,
-            "delay": 400,
+            "delay": 0,
             "distance": 0.01,
             "direction": "up",
             "trial_num": 85
@@ -794,426 +794,426 @@
         {
             "block_num": 18,
             "delay": 700,
-            "distance": 0.03,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 86
         },
         {
             "block_num": 18,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 87
         },
         {
             "block_num": 18,
-            "delay": 400,
+            "delay": 100,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "diag",
             "trial_num": 88
         },
         {
             "block_num": 18,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 89
         },
         {
             "block_num": 18,
-            "delay": 0,
-            "distance": 0.05,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "diag",
             "trial_num": 90
         },
         {
             "block_num": 19,
-            "delay": 700,
-            "distance": 0.03,
+            "delay": 0,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 91
         },
         {
             "block_num": 19,
-            "delay": 0,
-            "distance": 0.01,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 92
         },
         {
             "block_num": 19,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 93
         },
         {
             "block_num": 19,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 94
         },
         {
             "block_num": 19,
-            "delay": 100,
-            "distance": 0.01,
+            "delay": 0,
+            "distance": 0.015,
             "direction": "right",
             "trial_num": 95
         },
         {
             "block_num": 20,
-            "delay": 100,
-            "distance": 0.01,
+            "delay": 700,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 96
         },
         {
             "block_num": 20,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 97
         },
         {
             "block_num": 20,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 98
         },
         {
             "block_num": 20,
-            "delay": 700,
-            "distance": 0.03,
+            "delay": 100,
+            "distance": 0.015,
             "direction": "up",
             "trial_num": 99
         },
         {
             "block_num": 20,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 400,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 100
         },
         {
             "block_num": 21,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 101
         },
         {
             "block_num": 21,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 102
         },
         {
             "block_num": 21,
-            "delay": 400,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 103
         },
         {
             "block_num": 21,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 104
         },
         {
             "block_num": 21,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "diag",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 105
         },
         {
             "block_num": 22,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 106
         },
         {
             "block_num": 22,
-            "delay": 700,
+            "delay": 100,
             "distance": 0.01,
             "direction": "up",
             "trial_num": 107
         },
         {
             "block_num": 22,
-            "delay": 400,
-            "distance": 0.01,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 108
         },
         {
             "block_num": 22,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "diag",
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 109
         },
         {
             "block_num": 22,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 110
         },
         {
             "block_num": 23,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 111
         },
         {
             "block_num": 23,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 112
         },
         {
             "block_num": 23,
             "delay": 700,
-            "distance": 0.03,
-            "direction": "right",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 113
         },
         {
             "block_num": 23,
-            "delay": 100,
+            "delay": 0,
             "distance": 0.01,
-            "direction": "up",
+            "direction": "diag",
             "trial_num": 114
         },
         {
             "block_num": 23,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "diag",
             "trial_num": 115
         },
         {
             "block_num": 24,
-            "delay": 100,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 116
         },
         {
             "block_num": 24,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 117
         },
         {
             "block_num": 24,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 118
         },
         {
             "block_num": 24,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 119
         },
         {
             "block_num": 24,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 120
         },
         {
             "block_num": 25,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 121
         },
         {
             "block_num": 25,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 122
-        },
-        {
-            "block_num": 25,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
-            "trial_num": 123
-        },
-        {
-            "block_num": 25,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
-            "trial_num": 124
         },
         {
             "block_num": 25,
             "delay": 400,
             "distance": 0.01,
             "direction": "up",
+            "trial_num": 123
+        },
+        {
+            "block_num": 25,
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "up",
+            "trial_num": 124
+        },
+        {
+            "block_num": 25,
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 125
         },
         {
             "block_num": 26,
-            "delay": 100,
-            "distance": 0.01,
+            "delay": 700,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 126
         },
         {
             "block_num": 26,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 127
         },
         {
             "block_num": 26,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 128
         },
         {
             "block_num": 26,
-            "delay": 0,
+            "delay": 100,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "up",
             "trial_num": 129
         },
         {
             "block_num": 26,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 130
         },
         {
             "block_num": 27,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 131
         },
         {
             "block_num": 27,
-            "delay": 100,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 132
         },
         {
             "block_num": 27,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 133
         },
         {
             "block_num": 27,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 134
         },
         {
             "block_num": 27,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 135
         },
         {
             "block_num": 28,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 700,
+            "distance": 0.015,
             "direction": "right",
             "trial_num": 136
         },
         {
             "block_num": 28,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 137
         },
         {
             "block_num": 28,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 138
         },
         {
             "block_num": 28,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "diag",
             "trial_num": 139
         },
         {
             "block_num": 28,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 140
         },
         {
             "block_num": 29,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 141
         },
         {
             "block_num": 29,
-            "delay": 0,
-            "distance": 0.01,
+            "delay": 400,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 142
         },
         {
             "block_num": 29,
-            "delay": 100,
+            "delay": 0,
             "distance": 0.01,
             "direction": "right",
             "trial_num": 143
         },
         {
             "block_num": 29,
-            "delay": 700,
+            "delay": 0,
             "distance": 0.01,
-            "direction": "diag",
+            "direction": "up",
             "trial_num": 144
         },
         {
             "block_num": 29,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 400,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 145
         },
         {
             "block_num": 30,
-            "delay": 100,
+            "delay": 400,
             "distance": 0.01,
             "direction": "up",
             "trial_num": 146
@@ -1221,553 +1221,553 @@
         {
             "block_num": 30,
             "delay": 0,
-            "distance": 0.03,
+            "distance": 0.015,
             "direction": "up",
             "trial_num": 147
         },
         {
             "block_num": 30,
-            "delay": 400,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "up",
             "trial_num": 148
         },
         {
             "block_num": 30,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 149
         },
         {
             "block_num": 30,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 400,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 150
         },
         {
             "block_num": 31,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 151
         },
         {
             "block_num": 31,
-            "delay": 100,
+            "delay": 700,
             "distance": 0.01,
             "direction": "right",
             "trial_num": 152
         },
         {
             "block_num": 31,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 100,
+            "distance": 0.01,
             "direction": "diag",
             "trial_num": 153
         },
         {
             "block_num": 31,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 154
         },
         {
             "block_num": 31,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "diag",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 155
         },
         {
             "block_num": 32,
-            "delay": 100,
+            "delay": 400,
             "distance": 0.01,
             "direction": "up",
             "trial_num": 156
         },
         {
             "block_num": 32,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 157
         },
         {
             "block_num": 32,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 158
         },
         {
             "block_num": 32,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 159
         },
         {
             "block_num": 32,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 160
         },
         {
             "block_num": 33,
             "delay": 0,
-            "distance": 0.01,
-            "direction": "up",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 161
         },
         {
             "block_num": 33,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "diag",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 162
         },
         {
             "block_num": 33,
-            "delay": 0,
-            "distance": 0.05,
+            "delay": 100,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 163
         },
         {
             "block_num": 33,
             "delay": 100,
-            "distance": 0.03,
-            "direction": "diag",
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 164
         },
         {
             "block_num": 33,
-            "delay": 400,
+            "delay": 0,
             "distance": 0.01,
-            "direction": "diag",
+            "direction": "up",
             "trial_num": 165
         },
         {
             "block_num": 34,
             "delay": 0,
             "distance": 0.01,
-            "direction": "right",
+            "direction": "up",
             "trial_num": 166
         },
         {
             "block_num": 34,
-            "delay": 100,
+            "delay": 700,
             "distance": 0.01,
             "direction": "diag",
             "trial_num": 167
         },
         {
             "block_num": 34,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 168
         },
         {
             "block_num": 34,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 169
         },
         {
             "block_num": 34,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 170
         },
         {
             "block_num": 35,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 171
         },
         {
             "block_num": 35,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 700,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 172
         },
         {
             "block_num": 35,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 173
         },
         {
             "block_num": 35,
-            "delay": 700,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 174
         },
         {
             "block_num": 35,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 175
         },
         {
             "block_num": 36,
-            "delay": 400,
+            "delay": 100,
             "distance": 0.01,
             "direction": "right",
             "trial_num": 176
         },
         {
             "block_num": 36,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 177
         },
         {
             "block_num": 36,
-            "delay": 700,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 178
         },
         {
             "block_num": 36,
             "delay": 700,
-            "distance": 0.01,
-            "direction": "right",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 179
         },
         {
             "block_num": 36,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 180
         },
         {
             "block_num": 37,
-            "delay": 400,
-            "distance": 0.05,
+            "delay": 100,
+            "distance": 0.005,
             "direction": "diag",
             "trial_num": 181
         },
         {
             "block_num": 37,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 182
         },
         {
             "block_num": 37,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "up",
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 183
         },
         {
             "block_num": 37,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 184
         },
         {
             "block_num": 37,
-            "delay": 100,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 185
         },
         {
             "block_num": 38,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 186
         },
         {
             "block_num": 38,
             "delay": 0,
-            "distance": 0.05,
-            "direction": "diag",
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 187
         },
         {
             "block_num": 38,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 188
         },
         {
             "block_num": 38,
-            "delay": 400,
-            "distance": 0.03,
-            "direction": "diag",
+            "delay": 0,
+            "distance": 0.005,
+            "direction": "up",
             "trial_num": 189
         },
         {
             "block_num": 38,
             "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
+            "distance": 0.015,
+            "direction": "right",
             "trial_num": 190
         },
         {
             "block_num": 39,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 191
         },
         {
             "block_num": 39,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 192
         },
         {
             "block_num": 39,
-            "delay": 100,
-            "distance": 0.01,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 193
         },
         {
             "block_num": 39,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "up",
             "trial_num": 194
         },
         {
             "block_num": 39,
-            "delay": 100,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 195
         },
         {
             "block_num": 40,
-            "delay": 400,
+            "delay": 0,
             "distance": 0.01,
             "direction": "diag",
             "trial_num": 196
         },
         {
             "block_num": 40,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 197
         },
         {
             "block_num": 40,
             "delay": 700,
-            "distance": 0.05,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 198
         },
         {
             "block_num": 40,
-            "delay": 400,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 199
         },
         {
             "block_num": 40,
             "delay": 0,
-            "distance": 0.03,
-            "direction": "right",
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 200
         },
         {
             "block_num": 41,
-            "delay": 0,
-            "distance": 0.05,
+            "delay": 700,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 201
         },
         {
             "block_num": 41,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "diag",
+            "delay": 100,
+            "distance": 0.01,
+            "direction": "up",
             "trial_num": 202
         },
         {
             "block_num": 41,
-            "delay": 400,
-            "distance": 0.01,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 203
         },
         {
             "block_num": 41,
-            "delay": 100,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 204
         },
         {
             "block_num": 41,
-            "delay": 100,
-            "distance": 0.01,
+            "delay": 0,
+            "distance": 0.015,
             "direction": "right",
             "trial_num": 205
         },
         {
             "block_num": 42,
             "delay": 100,
-            "distance": 0.01,
+            "distance": 0.015,
             "direction": "right",
             "trial_num": 206
         },
         {
             "block_num": 42,
-            "delay": 0,
-            "distance": 0.01,
-            "direction": "diag",
-            "trial_num": 207
-        },
-        {
-            "block_num": 42,
-            "delay": 100,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "up",
-            "trial_num": 208
+            "trial_num": 207
         },
         {
             "block_num": 42,
             "delay": 0,
             "distance": 0.01,
             "direction": "right",
+            "trial_num": 208
+        },
+        {
+            "block_num": 42,
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 209
         },
         {
             "block_num": 42,
-            "delay": 400,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.01,
             "direction": "diag",
             "trial_num": 210
         },
         {
             "block_num": 43,
             "delay": 700,
-            "distance": 0.05,
+            "distance": 0.01,
             "direction": "up",
             "trial_num": 211
         },
         {
             "block_num": 43,
-            "delay": 700,
-            "distance": 0.05,
+            "delay": 0,
+            "distance": 0.015,
             "direction": "diag",
             "trial_num": 212
         },
         {
             "block_num": 43,
             "delay": 0,
-            "distance": 0.01,
-            "direction": "right",
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 213
         },
         {
             "block_num": 43,
-            "delay": 400,
-            "distance": 0.01,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.015,
+            "direction": "diag",
             "trial_num": 214
         },
         {
             "block_num": 43,
-            "delay": 0,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 100,
+            "distance": 0.005,
+            "direction": "diag",
             "trial_num": 215
         },
         {
             "block_num": 44,
-            "delay": 700,
+            "delay": 0,
             "distance": 0.01,
-            "direction": "up",
+            "direction": "right",
             "trial_num": 216
         },
         {
             "block_num": 44,
-            "delay": 0,
-            "distance": 0.05,
+            "delay": 100,
+            "distance": 0.005,
             "direction": "up",
             "trial_num": 217
         },
         {
             "block_num": 44,
-            "delay": 400,
-            "distance": 0.05,
-            "direction": "up",
+            "delay": 700,
+            "distance": 0.01,
+            "direction": "right",
             "trial_num": 218
         },
         {
             "block_num": 44,
-            "delay": 0,
-            "distance": 0.03,
+            "delay": 700,
+            "distance": 0.005,
             "direction": "right",
             "trial_num": 219
         },
         {
             "block_num": 44,
-            "delay": 700,
-            "distance": 0.03,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 220
         },
         {
             "block_num": 45,
-            "delay": 100,
-            "distance": 0.05,
+            "delay": 400,
+            "distance": 0.01,
             "direction": "up",
             "trial_num": 221
         },
         {
             "block_num": 45,
             "delay": 700,
-            "distance": 0.01,
-            "direction": "diag",
+            "distance": 0.015,
+            "direction": "up",
             "trial_num": 222
         },
         {
             "block_num": 45,
-            "delay": 700,
-            "distance": 0.05,
-            "direction": "right",
+            "delay": 0,
+            "distance": 0.01,
+            "direction": "diag",
             "trial_num": 223
         },
         {
             "block_num": 45,
-            "delay": 0,
-            "distance": 0.03,
-            "direction": "up",
+            "delay": 400,
+            "distance": 0.005,
+            "direction": "right",
             "trial_num": 224
         },
         {
             "block_num": 45,
             "delay": 0,
-            "distance": 0.05,
+            "distance": 0.01,
             "direction": "right",
             "trial_num": 225
         }
