@@ -26,7 +26,7 @@ practice_conditions = [
 
 baseline_conditions = [
     {
-        "trial_num": i + 1,
+        "trial_num": i + 1 + 5,
         "delay": zero_delay,
         "distance": baseline_comb[i % len(baseline_comb)][0],
         "direction": baseline_comb[i % len(baseline_comb)][1]
@@ -37,7 +37,7 @@ baseline_conditions = [
 # Generate real task conditions with 45 blocks
 training_task_conditions = []
 
-trial_number = 1  # Initialize a counter for trial numbers
+trial_number = 33  # Initialize a counter for trial numbers
 
 for block in range(num_blocks_training_task):
     random.shuffle(block_comb)

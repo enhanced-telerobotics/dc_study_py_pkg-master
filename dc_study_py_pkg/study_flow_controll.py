@@ -147,8 +147,8 @@ class SimStudyController(Node):
             print(f"Completed {state} phase.")
 
     async def run_state(self, state):
-        trial_limit = {'practice': 5, 'baseline': 27,
-                       'training_task': 225}.get(state, 0)
+        trial_limit = {'practice': 5, 'baseline': 32,
+                       'training_task': 257}.get(state, 0)
 
         if state == 'training_task':
             for curr_trial_index in range(self.trials_completed, trial_limit):
@@ -211,7 +211,7 @@ class SimStudyController(Node):
 
         # Finalize the trial and handle breaks
         self.trials_completed = trial_num
-        self.blocks_completed = trial_num // 5
+        self.blocks_completed = (trial_num - 32) // 5 # offset
         if self.blocks_completed % 10 == 0 and self.trials_completed % 50 == 0:
             self.test_break()
         self.is_recording = False
@@ -267,13 +267,21 @@ class SimStudyController(Node):
         # else:
         #     print(f"Trial number {trial_num} not found in {state} phase.")
         #     return None
-
-        if 0 < trial_num <= len(conditions.get(state, [])):
-            self.current_conditions = conditions[state][trial_num - 1]
-            return conditions[state][trial_num - 1]
-        else:
+        try:
+            if (state == 'baseline'):
+                self.current_conditions = conditions[state][trial_num - 1 - 5]
+            elif(state == 'practice'):
+                self.current_conditions = conditions[state][trial_num - 1]
+            else:
+                self.current_conditions = conditions[state][trial_num - 1 - 32]
+            return self.current_conditions
+        except Exception as e:
+            print(f"Error: {e}")
             print(f"Trial number {trial_num} not found in {state} phase.")
             return None
+        # else:
+        #     print(f"Trial number {trial_num} not found in {state} phase.")
+        #     return None
     # Old HOLD and RELEASE method
     # def btn_cb(self, msg):
     #     if msg.buttons is not None:
@@ -424,8 +432,7 @@ class SimStudyController(Node):
         try:
             with open(self.state_file, 'r') as json_file:
                 state_data = json.load(json_file)
-                self.current_state = state_data.get(
-                    'current_state', 'practice')
+                self.current_state = state_data.get('current_state', 0)
                 self.trials_completed = state_data.get('trials_completed', 0)
                 self.blocks_completed = state_data.get('blocks_completed', 0)
                 print(
