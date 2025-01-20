@@ -151,6 +151,7 @@ class SimStudyController(Node):
                        'training_task': 257}.get(state, 0)
 
         if state == 'training_task':
+            self.test_break()
             for curr_trial_index in range(self.trials_completed, trial_limit):
                 await self.run_trial_block(state, curr_trial_index + 1)
         else:
@@ -212,7 +213,7 @@ class SimStudyController(Node):
         # Finalize the trial and handle breaks
         self.trials_completed = trial_num
         self.blocks_completed = (trial_num - 32) // 5 # offset
-        if self.blocks_completed % 10 == 0 and self.trials_completed % 50 == 0:
+        if self.blocks_completed % 10 == 0:
             self.test_break()
         self.is_recording = False
 
@@ -394,7 +395,8 @@ class SimStudyController(Node):
             target_quternion = [0.0, -1.0, 0.0, 0.0]
         elif direction == 'diag':
             # Diagonal direction (normalized)
-            dir_vector = np.array([1, 1, 1]) / np.sqrt(3)
+            # SAME NAME but front direction
+            dir_vector = np.array([1, 0, 0])
         elif direction == 'right':
             dir_vector = np.array([0, -1, 0])  # Down direction
         else:
