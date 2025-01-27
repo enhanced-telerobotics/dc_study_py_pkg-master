@@ -6,14 +6,24 @@ from rclpy.parameter import Parameter
 from geometry_msgs.msg import Vector3, Pose
 from sensor_msgs.msg import Joy
 from std_msgs.msg import Bool
+import sys
 import time
 import asyncio
 import numpy as np
 import json
 import csv
-import os
+import os   
+import tty
+import termios
+import select
+import threading
 
 
+def is_data():
+    """
+    Check if there's data available on stdin.
+    """
+    return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
 class SimStudyController(Node):
     def __init__(self, robot):
         super().__init__('sim_usr_subscriber')
@@ -21,15 +31,16 @@ class SimStudyController(Node):
         # Paths for saving state and conditions (set as relative paths)
         self.state_file = os.path.join(
             os.path.dirname(__file__), 'user_study_state.json')
-        self.conditions_json = "/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/dc_study_py_pkg/trial_conditions.json"
+        self.conditions_json = "/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/dc_study_py_pkg/trial_con111ditions.json"
         self.data_csv = os.path.join(
-            os.path.dirname(__file__), 'trial_pose_data.csv')
-
+            os.path.dirname(__file__), 'training_trial_pose_data.csv')
+        self.evaluation_csv = os.path.join(
+            os.path.dirname(__file__), 'evaluation_trial_pose_data.csv')
         # Initialize current state and study phases
         self.trials_phase = 'Reaching'
         self.current_state = 'practice'
         self.study_state = ['practice', 'baseline',
-                            'training_task', 'evaluation']
+                            'training_task', 'evaluation_task']
         self.trials_completed = 0
         self.blocks_completed = 0
         self.current_conditions = {
@@ -56,9 +67,10 @@ class SimStudyController(Node):
         self.counter_control = self.create_publisher(Bool, 'counter_cmd', 10)
 
         # Create client for 'set_parameters' service to modify delay settings
-        self.parameter_client = self.create_client(
+        self.delay_parameter_client = self.create_client(
             SetParameters, '/pose_delay_node/set_parameters')
-
+        self.gain_parameter_client = self.create_client(
+            SetParameters, '/abs_pose_comp_node/set_parameters')
         # Subscription for pose data
         self.is_recording = False
         self.pose_data = self.create_subscription(
@@ -66,9 +78,10 @@ class SimStudyController(Node):
         self.pose_data_buffer = []
 
         # Wait for the service to become available
-        while not self.parameter_client.wait_for_service(timeout_sec=5.0):
-            self.get_logger().warn('Waiting for parameter service to become available...')
-
+        while not self.delay_parameter_client.wait_for_service(timeout_sec=5.0):
+            self.get_logger().warn('Waiting for delay service to become available...')
+        while not self.gain_parameter_client.wait_for_service(timeout_sec=5.0):
+            self.get_logger().warn('Waiting for gain service to become available...')
         # Restore previous state if available
         self.restore_state()
     # Data recorder
@@ -86,32 +99,50 @@ class SimStudyController(Node):
                 self.current_conditions['delay'],  # Delay condition
                 self.current_conditions['distance'],  # Distance condition
                 self.current_conditions['direction'],  # Direction condition
-                msg.position.x - 1.475, msg.position.y, msg.position.z + 0.75,
+                # msg.position.x - 1.475, msg.position.y, msg.position.z + 0.75,
+                msg.position.x, msg.position.y, msg.position.z,
                 msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w
             ])
-
     async def save_to_csv(self):
         try:
-            with open(self.data_csv, 'a', newline='') as csvfile:
-                csv_writer = csv.writer(csvfile)
-                if csvfile.tell() == 0:
-                    csv_writer.writerow([
-                        'Timestamp', 'State', 'Trial Number', 'Phase', 'Delay', 'Distance', 'Direction',
-                        'P_x', 'P_y', 'P_z', 'O_x', 'O_y', 'O_z', 'O_w'
-                    ])
+            if self.current_state == 'evaluation_task':
+                with open(self.evaluation_csv, 'a', newline='') as eval_csvfile:
+                    eval_csv_writer = csv.writer(eval_csvfile)
+                    if eval_csvfile.tell() == 0:
+                        eval_csv_writer.writerow([
+                            'Timestamp', 'State', 'Trial Number', 'Phase', 'Delay', 'Distance', 'Direction',
+                            'P_x', 'P_y', 'P_z', 'O_x', 'O_y', 'O_z', 'O_w'
+                        ])
 
-                while self.is_recording:
-                    # Write accumulated data to CSV and clear buffer
-                    if self.pose_data_buffer:
-                        csv_writer.writerows(self.pose_data_buffer)
-                        self.pose_data_buffer.clear()
+                    while self.is_recording:
+                        # Write accumulated data to evaluation CSV and clear buffer
+                        if self.pose_data_buffer:
+                            eval_csv_writer.writerows(self.pose_data_buffer)
+                            self.pose_data_buffer.clear()
 
-                    # Wait for a small interval before checking the buffer again
-                    await asyncio.sleep(0.1)
+                        # Wait for a small interval before checking the buffer again
+                        await asyncio.sleep(0.1)
+            else:
+                with open(self.data_csv, 'a', newline='') as csvfile:
+                    csv_writer = csv.writer(csvfile)
+                    if csvfile.tell() == 0:
+                        csv_writer.writerow([
+                            'Timestamp', 'State', 'Trial Number', 'Phase', 'Delay', 'Distance', 'Direction',
+                            'P_x', 'P_y', 'P_z', 'O_x', 'O_y', 'O_z', 'O_w'
+                        ])
+
+                    while self.is_recording:
+                        # Write accumulated data to CSV and clear buffer
+                        if self.pose_data_buffer:
+                            csv_writer.writerows(self.pose_data_buffer)
+                            self.pose_data_buffer.clear()
+
+                        # Wait for a small interval before checking the buffer again
+                        await asyncio.sleep(0.1)
         except IOError as e:
             self.get_logger().error(f"Failed to write pose data to CSV: {e}")
+    
     # Dynamic adjust Delay
-
     def alternate_delay_param(self, delay_value):
 
         # Prepare the request to change the parameter
@@ -122,10 +153,22 @@ class SimStudyController(Node):
         ]
 
         # Call the service asynchronously and add a callback to handle the response
-        future = self.parameter_client.call_async(request)
-        future.add_done_callback(self.parameter_update_callback)
+        future = self.delay_parameter_client.call_async(request)
+        future.add_done_callback(self.delay_update_callback)
+        
+    def alternate_gain_param(self, gain_value):
 
-    def parameter_update_callback(self, future):
+        # Prepare the request to change the parameter
+        request = SetParameters.Request()
+        request.parameters = [
+            Parameter(name='teleop_param', value=gain_value,
+                      type_=Parameter.Type.DOUBLE).to_parameter_msg()
+        ]
+
+        # Call the service asynchronously and add a callback to handle the response
+        future = self.gain_parameter_client.call_async(request)
+        future.add_done_callback(self.gain_update_callback)
+    def delay_update_callback(self, future):
         try:
             response = future.result()
             if response is not None:
@@ -134,6 +177,16 @@ class SimStudyController(Node):
                 self.get_logger().error("Failed to update 'delay_time'.")
         except Exception as e:
             self.get_logger().error(f"Service call failed: {str(e)}")
+    def gain_update_callback(self, future):
+        try:
+            response = future.result()
+            if response is not None:
+                self.get_logger().info("Successfully updated 'gain'.")
+            else:
+                self.get_logger().error("Failed to update 'gain'.")
+        except Exception as e:
+            self.get_logger().error(f"Service call failed: {str(e)}")
+    
     # Study flow (asynchronized)
 
     async def run_study(self):
@@ -145,13 +198,15 @@ class SimStudyController(Node):
             print(f"Starting {state} phase...")
             await self.run_state(state)
             print(f"Completed {state} phase.")
-
     async def run_state(self, state):
         trial_limit = {'practice': 5, 'baseline': 32,
-                       'training_task': 257}.get(state, 0)
-
-        if state == 'training_task':
+                       'training_task': 257, 'evaluation_task': 366}.get(state, 0)
+        if self.trials_completed in [32, 82, 132, 182, 232, 257, 332, 382]:
             self.test_break()
+        if state == 'training_task':
+            for curr_trial_index in range(self.trials_completed, trial_limit):
+                await self.run_trial_block(state, curr_trial_index + 1)
+        elif state == 'evaluation_task':
             for curr_trial_index in range(self.trials_completed, trial_limit):
                 await self.run_trial_block(state, curr_trial_index + 1)
         else:
@@ -179,7 +234,7 @@ class SimStudyController(Node):
             # Finalize the trial and handle breaks
             self.trials_completed = trial_num
             self.is_recording = False
-
+            
     async def run_trial_block(self, state, trial_num):
         """
         Runs a single trial block consisting of reaching and retract phases.
@@ -212,10 +267,12 @@ class SimStudyController(Node):
 
         # Finalize the trial and handle breaks
         self.trials_completed = trial_num
-        self.blocks_completed = (trial_num - 32) // 5 # offset
-        if self.blocks_completed % 10 == 0:
-            self.test_break()
+        if state == 'training_task':
+            self.blocks_completed = (trial_num - 32) // 5 # offset
+        else:
+            self.blocks_completed = (trial_num - 256) // 5
         self.is_recording = False
+
 
 
     async def run_phase(self, phase_name, delay, distance, direction):
@@ -235,7 +292,8 @@ class SimStudyController(Node):
             self.generate_target(distance, direction)
         elif phase_name == "Retract":
             self.home_for_retract()
-
+        if self.current_state == 'evaluation_task':
+            self.alternate_gain_param(self.gain_calc(delay, distance, direction))
         self.alternate_delay_param(delay)
         self.count_down()
         print(f"Please go to target ({phase_name} phase).")
@@ -246,6 +304,7 @@ class SimStudyController(Node):
         while not self.trial_end:
             await asyncio.sleep(0.1)
         self.alternate_delay_param(0)
+        self.alternate_gain_param(0.2)
         print(f"{phase_name} Phase completed.")
         self.trial_ready = False
         self.trial_end = False
@@ -260,43 +319,21 @@ class SimStudyController(Node):
     def get_trial_conditions(self, file_path, trial_num, state):
         with open(file_path, 'r') as json_file:
             conditions = json.load(json_file)
-
-        # if (state == 'baseline' or state == 'practice') and 0 < trial_num <= len(conditions['baseline']):
-        #     return conditions['baseline'][trial_num - 1]
-        # elif state == 'training_task' and 0 < trial_num <= len(conditions['training_task']):
-        #     return conditions['training_task'][trial_num - 1]
-        # else:
-        #     print(f"Trial number {trial_num} not found in {state} phase.")
-        #     return None
         try:
             if (state == 'baseline'):
                 self.current_conditions = conditions[state][trial_num - 1 - 5]
             elif(state == 'practice'):
                 self.current_conditions = conditions[state][trial_num - 1]
-            else:
+            elif(state == 'training_task'):
                 self.current_conditions = conditions[state][trial_num - 1 - 32]
+            else:
+                self.current_conditions = conditions[state][trial_num - 1 - 256]
             return self.current_conditions
         except Exception as e:
             print(f"Error: {e}")
             print(f"Trial number {trial_num} not found in {state} phase.")
             return None
-        # else:
-        #     print(f"Trial number {trial_num} not found in {state} phase.")
-        #     return None
-    # Old HOLD and RELEASE method
-    # def btn_cb(self, msg):
-    #     if msg.buttons is not None:
-    #         self.btn_curr_state = msg.buttons[3] == 1
-    #         if self.btn_curr_state and not self.btn_last_state:
-    #             self.get_logger().info("Button pressed! Please hold till you finished this run..")
-    #             self.trial_ready = True
-    #         elif not self.btn_curr_state and self.btn_last_state:
-    #             r_msg = Vector3()
-    #             r_msg.x = 0.0
-    #             r_msg.z = 1.0
-    #             self.robot_control.publish(r_msg)
-    #             self.trial_end = True
-    #         self.btn_last_state = self.btn_curr_state
+        
     def btn_cb(self, msg):
         if msg.buttons is not None:
             self.btn_curr_state = msg.buttons[6] == 1
@@ -325,9 +362,6 @@ class SimStudyController(Node):
             msg.data = True
             self.counter_control.publish(msg)
             print("Starting countdown:")
-            # for i in range(3, 0, -1):
-            #     print(str(i) + "...")
-            #     time.sleep(0.6)
             time.sleep(1)
             print("Countdown complete!")
             msg.data = False
@@ -353,15 +387,44 @@ class SimStudyController(Node):
 
         print("""
         /\_/\  
-       ( o.o )   Meow~ It's break time!
+    ( o.o )   Meow~ It's break time!
         > ^ <
         """)
 
         print("\033[1;36mTake a moment to relax and stretch.\033[0m")
+        print("Press 'c' to end the break early.\n")
+
+        # Flag to indicate if 'c' was pressed
+        stop_break = threading.Event()
+
+        def listen_for_c():
+            """
+            Listen for the 'c' keypress to set the stop_break event.
+            """
+            # Unix/Linux/MacOS
+            fd = sys.stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setcbreak(fd)
+                while not stop_break.is_set():
+                    if is_data():
+                        key = sys.stdin.read(1).lower()
+                        if key == 'c':
+                            stop_break.set()
+                            break
+                    time.sleep(0.1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+        # Start the listener thread
+        listener_thread = threading.Thread(target=listen_for_c, daemon=True)
+        listener_thread.start()
 
         # Countdown for a 5-minute break
         total_seconds = 300  # 5 minutes
         for i in range(total_seconds, 0, -1):
+            if stop_break.is_set():
+                break  # Exit the countdown loop if 'c' was pressed
             mins, secs = divmod(i, 60)
             time_display = f"{mins:02}:{secs:02}"
             print(
@@ -371,6 +434,11 @@ class SimStudyController(Node):
         # Clear break message
         os.system('cls' if os.name == 'nt' else 'clear')
         print("Break over! Let's get back to work.")
+
+        if stop_break.is_set():
+            print("You ended the break early by pressing 'c'.")
+        else:
+            print("You completed the full 5-minute break.")
 
     def home(self):
         msg = Vector3()
@@ -441,7 +509,28 @@ class SimStudyController(Node):
                     f"Restored state: {self.current_state}, Trials Completed: {self.trials_completed}, Blocks Completed: {self.blocks_completed}")
         except (IOError, json.JSONDecodeError):
             self.get_logger().warning("No previous state found. Starting from the beginning.")
-
+    def gain_calc(self, delay, distance, direction):
+        gain_table = [
+                {"delay": 100, "distance": 0.005, "direction": "up", "gain": 0.9},
+                {"delay": 100, "distance": 0.01, "direction": "up", "gain": 0.8},
+                {"delay": 100, "distance": 0.015, "direction": "up", "gain": 0.7},
+                {"delay": 400, "distance": 0.005, "direction": "diag", "gain": 0.6},
+                {"delay": 400, "distance": 0.01, "direction": "diag", "gain": 0.5},
+                {"delay": 400, "distance": 0.015, "direction": "diag", "gain": 0.4},
+                {"delay": 700, "distance": 0.005, "direction": "right", "gain": 0.3},
+                {"delay": 700, "distance": 0.01, "direction": "right", "gain": 0.2},
+                {"delay": 700, "distance": 0.015, "direction": "right", "gain": 0.1}
+            ]
+        for entry in gain_table:
+            if (entry["delay"] == delay and
+                entry["distance"] == distance and
+                entry["direction"] == direction):
+                gain = entry["gain"] * 0.2
+        # if gain < 0.5:
+        #     return 0.5
+        # else:
+        #     return gain
+        return gain
 
 def main(args=None):
     rclpy.init(args=args)
