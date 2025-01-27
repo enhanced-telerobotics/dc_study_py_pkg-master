@@ -12,7 +12,7 @@ import asyncio
 import numpy as np
 import json
 import csv
-import os   
+import os
 import tty
 import termios
 import select
@@ -24,6 +24,8 @@ def is_data():
     Check if there's data available on stdin.
     """
     return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
+
+
 class SimStudyController(Node):
     def __init__(self, robot):
         super().__init__('sim_usr_subscriber')
@@ -33,9 +35,9 @@ class SimStudyController(Node):
             os.path.dirname(__file__), 'user_study_state.json')
         self.conditions_json = "/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/dc_study_py_pkg/trial_con111ditions.json"
         self.data_csv = os.path.join(
-            os.path.dirname(__file__), 'training_trial_pose_data.csv')
+            os.path.dirname(__file__), 'dataset/training_trial_pose_data.csv')
         self.evaluation_csv = os.path.join(
-            os.path.dirname(__file__), 'evaluation_trial_pose_data.csv')
+            os.path.dirname(__file__), 'dataset/evaluation_trial_pose_data.csv')
         # Initialize current state and study phases
         self.trials_phase = 'Reaching'
         self.current_state = 'practice'
@@ -50,7 +52,8 @@ class SimStudyController(Node):
         }
 
         # Button subscription for user interaction
-        self.btn_sub = self.create_subscription(Joy, 'delayed_button', self.btn_cb, 10)
+        self.btn_sub = self.create_subscription(
+            Joy, 'delayed_button', self.btn_cb, 10)
         self.btn_curr_state = False
         self.btn_last_state = False
 
@@ -103,6 +106,7 @@ class SimStudyController(Node):
                 msg.position.x, msg.position.y, msg.position.z,
                 msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w
             ])
+
     async def save_to_csv(self):
         try:
             if self.current_state == 'evaluation_task':
@@ -141,7 +145,7 @@ class SimStudyController(Node):
                         await asyncio.sleep(0.1)
         except IOError as e:
             self.get_logger().error(f"Failed to write pose data to CSV: {e}")
-    
+
     # Dynamic adjust Delay
     def alternate_delay_param(self, delay_value):
 
@@ -155,7 +159,7 @@ class SimStudyController(Node):
         # Call the service asynchronously and add a callback to handle the response
         future = self.delay_parameter_client.call_async(request)
         future.add_done_callback(self.delay_update_callback)
-        
+
     def alternate_gain_param(self, gain_value):
 
         # Prepare the request to change the parameter
@@ -168,6 +172,7 @@ class SimStudyController(Node):
         # Call the service asynchronously and add a callback to handle the response
         future = self.gain_parameter_client.call_async(request)
         future.add_done_callback(self.gain_update_callback)
+
     def delay_update_callback(self, future):
         try:
             response = future.result()
@@ -177,6 +182,7 @@ class SimStudyController(Node):
                 self.get_logger().error("Failed to update 'delay_time'.")
         except Exception as e:
             self.get_logger().error(f"Service call failed: {str(e)}")
+
     def gain_update_callback(self, future):
         try:
             response = future.result()
@@ -186,7 +192,7 @@ class SimStudyController(Node):
                 self.get_logger().error("Failed to update 'gain'.")
         except Exception as e:
             self.get_logger().error(f"Service call failed: {str(e)}")
-    
+
     # Study flow (asynchronized)
 
     async def run_study(self):
@@ -198,11 +204,11 @@ class SimStudyController(Node):
             print(f"Starting {state} phase...")
             await self.run_state(state)
             print(f"Completed {state} phase.")
+
     async def run_state(self, state):
         trial_limit = {'practice': 5, 'baseline': 32,
                        'training_task': 257, 'evaluation_task': 366}.get(state, 0)
-        if self.trials_completed in [32, 82, 132, 182, 232, 257, 332, 382]:
-            self.test_break()
+
         if state == 'training_task':
             for curr_trial_index in range(self.trials_completed, trial_limit):
                 await self.run_trial_block(state, curr_trial_index + 1)
@@ -219,7 +225,7 @@ class SimStudyController(Node):
 
         trial_conditions = self.get_trial_conditions(
             self.conditions_json, trial_num, state)
-        
+
         if trial_conditions:
             delay = trial_conditions['delay']
             distance = trial_conditions['distance']
@@ -234,7 +240,8 @@ class SimStudyController(Node):
             # Finalize the trial and handle breaks
             self.trials_completed = trial_num
             self.is_recording = False
-            
+            if self.trials_completed in [32, 82, 132, 182, 232, 257, 332, 382]:
+                self.test_break()
     async def run_trial_block(self, state, trial_num):
         """
         Runs a single trial block consisting of reaching and retract phases.
@@ -246,9 +253,11 @@ class SimStudyController(Node):
         await self.wait_for_trial_ready()
 
         # Retrieve trial conditions
-        trial_conditions = self.get_trial_conditions(self.conditions_json, trial_num, state)
+        trial_conditions = self.get_trial_conditions(
+            self.conditions_json, trial_num, state)
         if not trial_conditions:
-            print(f"Error: No trial conditions found for trial {trial_num} in {state} phase.")
+            print(
+                f"Error: No trial conditions found for trial {trial_num} in {state} phase.")
             return
 
         delay = trial_conditions['delay']
@@ -268,13 +277,12 @@ class SimStudyController(Node):
         # Finalize the trial and handle breaks
         self.trials_completed = trial_num
         if state == 'training_task':
-            self.blocks_completed = (trial_num - 32) // 5 # offset
+            self.blocks_completed = (trial_num - 32) // 5  # offset
         else:
             self.blocks_completed = (trial_num - 256) // 5
         self.is_recording = False
-
-
-
+        if self.trials_completed in [32, 82, 132, 182, 232, 257, 332, 382]:
+            self.test_break()
     async def run_phase(self, phase_name, delay, distance, direction):
         """
         Runs a single phase of a trial (e.g., Reaching or Retract).
@@ -285,7 +293,7 @@ class SimStudyController(Node):
             direction (float): Direction parameter for the trial.
         """
         await self.wait_for_trial_ready()
-        
+
         # Initialize the phase
         if phase_name == "Reaching":
             self.home()
@@ -293,7 +301,8 @@ class SimStudyController(Node):
         elif phase_name == "Retract":
             self.home_for_retract()
         if self.current_state == 'evaluation_task':
-            self.alternate_gain_param(self.gain_calc(delay, distance, direction))
+            self.alternate_gain_param(
+                self.gain_calc(delay, distance, direction))
         self.alternate_delay_param(delay)
         self.count_down()
         print(f"Please go to target ({phase_name} phase).")
@@ -304,12 +313,11 @@ class SimStudyController(Node):
         while not self.trial_end:
             await asyncio.sleep(0.1)
         self.alternate_delay_param(0)
-        self.alternate_gain_param(0.2)
+        # self.alternate_gain_param(0.2)
         print(f"{phase_name} Phase completed.")
         self.trial_ready = False
         self.trial_end = False
         self.log_state()
-
 
     async def wait_for_trial_ready(self):
         """Waits asynchronously until the trial is ready to start."""
@@ -322,9 +330,9 @@ class SimStudyController(Node):
         try:
             if (state == 'baseline'):
                 self.current_conditions = conditions[state][trial_num - 1 - 5]
-            elif(state == 'practice'):
+            elif (state == 'practice'):
                 self.current_conditions = conditions[state][trial_num - 1]
-            elif(state == 'training_task'):
+            elif (state == 'training_task'):
                 self.current_conditions = conditions[state][trial_num - 1 - 32]
             else:
                 self.current_conditions = conditions[state][trial_num - 1 - 256]
@@ -333,11 +341,11 @@ class SimStudyController(Node):
             print(f"Error: {e}")
             print(f"Trial number {trial_num} not found in {state} phase.")
             return None
-        
+
     def btn_cb(self, msg):
         if msg.buttons is not None:
             self.btn_curr_state = msg.buttons[6] == 1
-            
+
             # Detect button press (transition from not pressed to pressed)
             if self.btn_curr_state and not self.btn_last_state:
                 if not self.trial_ready:  # Toggle to start the trial
@@ -352,7 +360,7 @@ class SimStudyController(Node):
                     self.trial_ready = False
                     self.trial_end = True
                     self.get_logger().info("Trial ended!")
-        
+
         # Update the last state
         self.btn_last_state = self.btn_curr_state
 
@@ -386,9 +394,9 @@ class SimStudyController(Node):
         print("="*40)
 
         print("""
-        /\_/\  
-    ( o.o )   Meow~ It's break time!
-        > ^ <
+         /\_/\  
+        ( o.o )   Meow~ It's break time!
+         > ^ <
         """)
 
         print("\033[1;36mTake a moment to relax and stretch.\033[0m")
@@ -509,28 +517,57 @@ class SimStudyController(Node):
                     f"Restored state: {self.current_state}, Trials Completed: {self.trials_completed}, Blocks Completed: {self.blocks_completed}")
         except (IOError, json.JSONDecodeError):
             self.get_logger().warning("No previous state found. Starting from the beginning.")
+
     def gain_calc(self, delay, distance, direction):
         gain_table = [
-                {"delay": 100, "distance": 0.005, "direction": "up", "gain": 0.9},
-                {"delay": 100, "distance": 0.01, "direction": "up", "gain": 0.8},
-                {"delay": 100, "distance": 0.015, "direction": "up", "gain": 0.7},
-                {"delay": 400, "distance": 0.005, "direction": "diag", "gain": 0.6},
-                {"delay": 400, "distance": 0.01, "direction": "diag", "gain": 0.5},
-                {"delay": 400, "distance": 0.015, "direction": "diag", "gain": 0.4},
-                {"delay": 700, "distance": 0.005, "direction": "right", "gain": 0.3},
-                {"delay": 700, "distance": 0.01, "direction": "right", "gain": 0.2},
-                {"delay": 700, "distance": 0.015, "direction": "right", "gain": 0.1}
-            ]
+            {"delay": 0, "distance": 0.005, "direction": "up", "gain": 1},
+            {"delay": 0, "distance": 0.01, "direction": "up", "gain": 1},
+            {"delay": 0, "distance": 0.015, "direction": "up", "gain": 1},
+            {"delay": 0, "distance": 0.005, "direction": "diag", "gain": 1},
+            {"delay": 0, "distance": 0.01, "direction": "diag", "gain": 1},
+            {"delay": 0, "distance": 0.015, "direction": "diag", "gain": 1},
+            {"delay": 0, "distance": 0.005, "direction": "right", "gain": 1},
+            {"delay": 0, "distance": 0.01, "direction": "right", "gain": 1},
+            {"delay": 0, "distance": 0.015, "direction": "right", "gain": 1},
+            {"delay": 100, "distance": 0.005, "direction": "up", "gain": 0.9},
+            {"delay": 100, "distance": 0.01, "direction": "up", "gain": 0.64},
+            {"delay": 100, "distance": 0.015, "direction": "up", "gain": 0.91},
+            {"delay": 100, "distance": 0.005, "direction": "diag", "gain": 0.36},
+            {"delay": 100, "distance": 0.01, "direction": "diag", "gain": 0.64},
+            {"delay": 100, "distance": 0.015, "direction": "diag", "gain": 0.91},
+            {"delay": 100, "distance": 0.005, "direction": "right", "gain": 0.36},
+            {"delay": 100, "distance": 0.01, "direction": "right", "gain": 0.64},
+            {"delay": 100, "distance": 0.015, "direction": "right", "gain": 0.91},
+            {"delay": 400, "distance": 0.005, "direction": "up", "gain": 0.19},
+            {"delay": 400, "distance": 0.01, "direction": "up", "gain": 0.46},
+            {"delay": 400, "distance": 0.015, "direction": "up", "gain": 0.74},
+            {"delay": 400, "distance": 0.005, "direction": "diag", "gain": 0.19},
+            {"delay": 400, "distance": 0.01, "direction": "diag", "gain": 0.46},
+            {"delay": 400, "distance": 0.015, "direction": "diag", "gain": 0.74},
+            {"delay": 400, "distance": 0.005, "direction": "right", "gain": 0.19},
+            {"delay": 400, "distance": 0.01, "direction": "right", "gain": 0.46},
+            {"delay": 400, "distance": 0.015, "direction": "right", "gain": 0.74},
+            {"delay": 700, "distance": 0.005, "direction": "up", "gain": 0.1},
+            {"delay": 700, "distance": 0.01, "direction": "up", "gain": 0.28},
+            {"delay": 700, "distance": 0.015, "direction": "up", "gain": 0.55},
+            {"delay": 700, "distance": 0.005, "direction": "diag", "gain": 0.1},
+            {"delay": 700, "distance": 0.01, "direction": "diag", "gain": 0.28},
+            {"delay": 700, "distance": 0.015, "direction": "diag", "gain": 0.55},
+            {"delay": 700, "distance": 0.005, "direction": "right", "gain": 0.1},
+            {"delay": 700, "distance": 0.01, "direction": "right", "gain": 0.28},
+            {"delay": 700, "distance": 0.015, "direction": "right", "gain": 0.55}
+        ]
         for entry in gain_table:
             if (entry["delay"] == delay and
                 entry["distance"] == distance and
-                entry["direction"] == direction):
+                    entry["direction"] == direction):
                 gain = entry["gain"] * 0.2
+                return gain
         # if gain < 0.5:
         #     return 0.5
         # else:
         #     return gain
-        return gain
+
 
 def main(args=None):
     rclpy.init(args=args)
