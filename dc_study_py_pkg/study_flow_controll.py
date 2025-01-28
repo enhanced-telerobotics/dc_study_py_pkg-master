@@ -240,7 +240,7 @@ class SimStudyController(Node):
             # Finalize the trial and handle breaks
             self.trials_completed = trial_num
             self.is_recording = False
-            if self.trials_completed in [32, 82, 132, 182, 232, 257, 332, 382]:
+            if self.trials_completed in [32, 82, 132, 182, 232, 257, 332]:
                 self.test_break()
     async def run_trial_block(self, state, trial_num):
         """
@@ -281,7 +281,7 @@ class SimStudyController(Node):
         else:
             self.blocks_completed = (trial_num - 256) // 5
         self.is_recording = False
-        if self.trials_completed in [32, 82, 132, 182, 232, 257, 332, 382]:
+        if self.trials_completed in [32, 82, 132, 182, 232, 257, 332]:
             self.test_break()
     async def run_phase(self, phase_name, delay, distance, direction):
         """
@@ -335,7 +335,7 @@ class SimStudyController(Node):
             elif (state == 'training_task'):
                 self.current_conditions = conditions[state][trial_num - 1 - 32]
             else:
-                self.current_conditions = conditions[state][trial_num - 1 - 256]
+                self.current_conditions = conditions[state][trial_num - 1 - 257]
             return self.current_conditions
         except Exception as e:
             print(f"Error: {e}")
@@ -529,44 +529,44 @@ class SimStudyController(Node):
             {"delay": 0, "distance": 0.005, "direction": "right", "gain": 1},
             {"delay": 0, "distance": 0.01, "direction": "right", "gain": 1},
             {"delay": 0, "distance": 0.015, "direction": "right", "gain": 1},
-            {"delay": 100, "distance": 0.005, "direction": "up", "gain": 0.9},
-            {"delay": 100, "distance": 0.01, "direction": "up", "gain": 0.64},
-            {"delay": 100, "distance": 0.015, "direction": "up", "gain": 0.91},
-            {"delay": 100, "distance": 0.005, "direction": "diag", "gain": 0.36},
-            {"delay": 100, "distance": 0.01, "direction": "diag", "gain": 0.64},
-            {"delay": 100, "distance": 0.015, "direction": "diag", "gain": 0.91},
-            {"delay": 100, "distance": 0.005, "direction": "right", "gain": 0.36},
-            {"delay": 100, "distance": 0.01, "direction": "right", "gain": 0.64},
-            {"delay": 100, "distance": 0.015, "direction": "right", "gain": 0.91},
-            {"delay": 400, "distance": 0.005, "direction": "up", "gain": 0.19},
-            {"delay": 400, "distance": 0.01, "direction": "up", "gain": 0.46},
-            {"delay": 400, "distance": 0.015, "direction": "up", "gain": 0.74},
-            {"delay": 400, "distance": 0.005, "direction": "diag", "gain": 0.19},
-            {"delay": 400, "distance": 0.01, "direction": "diag", "gain": 0.46},
-            {"delay": 400, "distance": 0.015, "direction": "diag", "gain": 0.74},
-            {"delay": 400, "distance": 0.005, "direction": "right", "gain": 0.19},
-            {"delay": 400, "distance": 0.01, "direction": "right", "gain": 0.46},
-            {"delay": 400, "distance": 0.015, "direction": "right", "gain": 0.74},
-            {"delay": 700, "distance": 0.005, "direction": "up", "gain": 0.1},
-            {"delay": 700, "distance": 0.01, "direction": "up", "gain": 0.28},
-            {"delay": 700, "distance": 0.015, "direction": "up", "gain": 0.55},
-            {"delay": 700, "distance": 0.005, "direction": "diag", "gain": 0.1},
-            {"delay": 700, "distance": 0.01, "direction": "diag", "gain": 0.28},
-            {"delay": 700, "distance": 0.015, "direction": "diag", "gain": 0.55},
-            {"delay": 700, "distance": 0.005, "direction": "right", "gain": 0.1},
-            {"delay": 700, "distance": 0.01, "direction": "right", "gain": 0.28},
-            {"delay": 700, "distance": 0.015, "direction": "right", "gain": 0.55}
+            {"delay": 100, "distance": 0.005, "direction": "right", "gain": 0.987194},
+            {"delay": 100, "distance": 0.01, "direction": "right", "gain": 1.0},
+            {"delay": 100, "distance": 0.015, "direction": "right", "gain":  1.514272},
+            {"delay": 250, "distance": 0.005, "direction": "right", "gain": 0.006184},
+            {"delay": 250, "distance": 0.01, "direction": "right", "gain": 0.100458},
+            {"delay": 250, "distance": 0.015, "direction": "right", "gain":  0.827965},
+            {"delay": 400, "distance": 0.005, "direction": "right", "gain": 0.003766},
+            {"delay": 400, "distance": 0.01, "direction": "right", "gain": 0.126824},
+            {"delay": 400, "distance": 0.015, "direction": "right", "gain": 0.310632},
+            {"delay": 100, "distance": 0.005, "direction": "up", "gain": 0.6302},
+            {"delay": 100, "distance": 0.01, "direction": "up", "gain": 1.6155},
+            {"delay": 100, "distance": 0.015, "direction": "up", "gain": 0.9231},
+            {"delay": 250, "distance": 0.005, "direction": "up", "gain": 2.7575},
+            {"delay": 250, "distance": 0.01, "direction": "up", "gain": 1.3862},
+            {"delay": 250, "distance": 0.015, "direction": "up", "gain": 1.9279},
+            {"delay": 400, "distance": 0.005, "direction": "up", "gain": 1.7659},
+            {"delay": 400, "distance": 0.01, "direction": "up", "gain": 3.0014},
+            {"delay": 400, "distance": 0.015, "direction": "up", "gain": 2.6075},
+            {"delay": 100, "distance": 0.005, "direction": "diag", "gain": 0.127376},
+            {"delay": 100, "distance": 0.01, "direction": "diag", "gain": 0.225942},
+            {"delay": 100, "distance": 0.015, "direction": "diag", "gain": 0.427632},
+            {"delay": 250, "distance": 0.005, "direction": "diag", "gain": 0.103888},
+            {"delay": 250, "distance": 0.01, "direction": "diag", "gain": 0.171204},
+            {"delay": 250, "distance": 0.015, "direction": "diag", "gain": 0.367504},
+            {"delay": 400, "distance": 0.005, "direction": "diag", "gain": 0.055566},
+            {"delay": 400, "distance": 0.01, "direction": "diag", "gain": 0.032944},
+            {"delay": 400, "distance": 0.015, "direction": "diag", "gain": 0.048292},
         ]
         for entry in gain_table:
             if (entry["delay"] == delay and
                 entry["distance"] == distance and
                     entry["direction"] == direction):
                 gain = entry["gain"] * 0.2
-                return gain
-        # if gain < 0.5:
-        #     return 0.5
-        # else:
-        #     return gain
+                if gain < 0.001:
+                    return 0.02
+                else:
+                    return gain
+
 
 
 def main(args=None):
