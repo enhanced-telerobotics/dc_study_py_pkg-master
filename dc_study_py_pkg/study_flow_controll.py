@@ -38,6 +38,8 @@ class SimStudyController(Node):
             os.path.dirname(__file__), 'dataset/training_trial_pose_data.csv')
         self.evaluation_csv = os.path.join(
             os.path.dirname(__file__), 'dataset/evaluation_trial_pose_data.csv')
+        self.gain_table_file = os.path.join(
+            os.path.dirname(__file__), 'gain_config.json')
         # Initialize current state and study phases
         self.trials_phase = 'Reaching'
         self.current_state = 'practice'
@@ -302,7 +304,7 @@ class SimStudyController(Node):
             self.home_for_retract()
         if self.current_state == 'evaluation_task':
             self.alternate_gain_param(
-                self.gain_calc(delay, distance, direction))
+                self.gain_calc(delay, distance, direction, phase_name))
         self.alternate_delay_param(delay)
         self.count_down()
         print(f"Please go to target ({phase_name} phase).")
@@ -518,54 +520,23 @@ class SimStudyController(Node):
         except (IOError, json.JSONDecodeError):
             self.get_logger().warning("No previous state found. Starting from the beginning.")
 
-    def gain_calc(self, delay, distance, direction):
-        gain_table = [
-            {"delay": 0, "distance": 0.005, "direction": "up", "gain": 1},
-            {"delay": 0, "distance": 0.01, "direction": "up", "gain": 1},
-            {"delay": 0, "distance": 0.015, "direction": "up", "gain": 1},
-            {"delay": 0, "distance": 0.005, "direction": "diag", "gain": 1},
-            {"delay": 0, "distance": 0.01, "direction": "diag", "gain": 1},
-            {"delay": 0, "distance": 0.015, "direction": "diag", "gain": 1},
-            {"delay": 0, "distance": 0.005, "direction": "right", "gain": 1},
-            {"delay": 0, "distance": 0.01, "direction": "right", "gain": 1},
-            {"delay": 0, "distance": 0.015, "direction": "right", "gain": 1},
-            {"delay": 100, "distance": 0.005, "direction": "right", "gain": 0.987194},
-            {"delay": 100, "distance": 0.01, "direction": "right", "gain": 1.0},
-            {"delay": 100, "distance": 0.015, "direction": "right", "gain":  1.514272},
-            {"delay": 250, "distance": 0.005, "direction": "right", "gain": 0.006184},
-            {"delay": 250, "distance": 0.01, "direction": "right", "gain": 0.100458},
-            {"delay": 250, "distance": 0.015, "direction": "right", "gain":  0.827965},
-            {"delay": 400, "distance": 0.005, "direction": "right", "gain": 0.003766},
-            {"delay": 400, "distance": 0.01, "direction": "right", "gain": 0.126824},
-            {"delay": 400, "distance": 0.015, "direction": "right", "gain": 0.310632},
-            {"delay": 100, "distance": 0.005, "direction": "up", "gain": 0.6302},
-            {"delay": 100, "distance": 0.01, "direction": "up", "gain": 1.6155},
-            {"delay": 100, "distance": 0.015, "direction": "up", "gain": 0.9231},
-            {"delay": 250, "distance": 0.005, "direction": "up", "gain": 2.7575},
-            {"delay": 250, "distance": 0.01, "direction": "up", "gain": 1.3862},
-            {"delay": 250, "distance": 0.015, "direction": "up", "gain": 1.9279},
-            {"delay": 400, "distance": 0.005, "direction": "up", "gain": 1.7659},
-            {"delay": 400, "distance": 0.01, "direction": "up", "gain": 3.0014},
-            {"delay": 400, "distance": 0.015, "direction": "up", "gain": 2.6075},
-            {"delay": 100, "distance": 0.005, "direction": "diag", "gain": 0.127376},
-            {"delay": 100, "distance": 0.01, "direction": "diag", "gain": 0.225942},
-            {"delay": 100, "distance": 0.015, "direction": "diag", "gain": 0.427632},
-            {"delay": 250, "distance": 0.005, "direction": "diag", "gain": 0.103888},
-            {"delay": 250, "distance": 0.01, "direction": "diag", "gain": 0.171204},
-            {"delay": 250, "distance": 0.015, "direction": "diag", "gain": 0.367504},
-            {"delay": 400, "distance": 0.005, "direction": "diag", "gain": 0.055566},
-            {"delay": 400, "distance": 0.01, "direction": "diag", "gain": 0.032944},
-            {"delay": 400, "distance": 0.015, "direction": "diag", "gain": 0.048292},
-        ]
-        for entry in gain_table:
-            if (entry["delay"] == delay and
-                entry["distance"] == distance and
-                    entry["direction"] == direction):
-                gain = entry["gain"] * 0.2
-                if gain < 0.001:
-                    return 0.02
-                else:
-                    return gain
+    def gain_calc(self, delay, distance, direction, phase_name):
+        try:
+            with open(self.gain_table_file, 'r') as json_file:
+                gain_table = json.load(json_file)
+            for entry in gain_table:
+                if (entry["delay"] == delay and
+                    entry["distance"] == distance and
+                        entry["direction"] == direction and
+                            entry["phase"] == phase_name):
+                                gain = entry["gain"] * 0.2
+                                if gain < 0.001:
+                                    return 0.02
+                                else:
+                                    return gain
+        except IOError as e:
+            self.get_logger().error(f"Failed to read gain table: {e}")
+            return 0.02
 
 
 
