@@ -346,7 +346,7 @@ class SimStudyController(Node):
 
     def btn_cb(self, msg):
         if msg.buttons is not None:
-            self.btn_curr_state = msg.buttons[6] == 1
+            self.btn_curr_state = msg.buttons[6] == 1 if len(msg.buttons) > 6 else msg.buttons[0] == 1
 
             # Detect button press (transition from not pressed to pressed)
             if self.btn_curr_state and not self.btn_last_state:
