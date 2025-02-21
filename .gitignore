@@ -1,3 +1,6 @@
 dc_study_py_pkg/test.py
 __pycache__/zmq.cpython-310.pyc
 dc_study_py_pkg/dataset/
+dc_study_py_pkg/gain_config.json
+dc_study_py_pkg/user_study_state.json
+dc_study_py_pkg/trial_conditions.json
