@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/erie_lab/ros2_kortex_ws/install/serial/include/**",
+        "/home/erie_lab/ros2_kortex_ws/install/ros2_control_test_assets/include/**",
+        "/home/erie_lab/ros2_kortex_ws/install/kortex_api/include/**",
+        "/home/erie_lab/ros2_kortex_ws/install/joint_limits/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/erie_lab/ros2_ws/src/cpp_pubsub/include/**",
+        "/home/erie_lab/ros2_ws/src/joy_con_publsher/include/**",
+        "/home/erie_lab/ros2_ws/src/viper_cpp/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

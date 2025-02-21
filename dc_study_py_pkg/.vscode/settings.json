@@ -1,0 +1,18 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/erie_lab/ros2_ws/install/ssg48_gripper_control/lib/python3.10/site-packages",
+        "/home/erie_lab/ros2_ws/install/py_pubsub/lib/python3.10/site-packages",
+        "/home/erie_lab/ros2_ws/install/dc_study_py_pkg/lib/python3.10/site-packages",
+        "/home/erie_lab/ros2_kortex_ws/install/erie_lab/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/erie_lab/ros2_ws/install/ssg48_gripper_control/lib/python3.10/site-packages",
+        "/home/erie_lab/ros2_ws/install/py_pubsub/lib/python3.10/site-packages",
+        "/home/erie_lab/ros2_ws/install/dc_study_py_pkg/lib/python3.10/site-packages",
+        "/home/erie_lab/ros2_kortex_ws/install/erie_lab/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

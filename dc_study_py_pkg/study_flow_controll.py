@@ -33,7 +33,7 @@ class SimStudyController(Node):
         # Paths for saving state and conditions (set as relative paths)
         self.state_file = os.path.join(
             os.path.dirname(__file__), 'user_study_state.json')
-        self.conditions_json = "/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/dc_study_py_pkg/trial_con111ditions.json"
+        self.conditions_json = "/home/erie_lab/ros2_ws/src/dc_study_py_pkg-master/dc_study_py_pkg/trial_conditions.json"
         self.data_csv = os.path.join(
             os.path.dirname(__file__), 'dataset/training_trial_pose_data.csv')
         self.evaluation_csv = os.path.join(
@@ -235,9 +235,9 @@ class SimStudyController(Node):
             # Reaching Phase
             self.trials_phase = "Reaching"
             await self.run_phase("Reaching", delay, distance, direction)
-            self.trials_phase = "Retract"
             # Retract Phase
-            await self.run_phase("Retract", delay, distance, direction)
+            # self.trials_phase = "Retract"
+            # await self.run_phase("Retract", delay, distance, direction)
 
             # Finalize the trial and handle breaks
             self.trials_completed = trial_num
@@ -272,9 +272,10 @@ class SimStudyController(Node):
         # Reaching Phase
         self.trials_phase = "Reaching"
         await self.run_phase("Reaching", delay, distance, direction)
-        self.trials_phase = "Retract"
+        
         # Retract Phase
-        await self.run_phase("Retract", delay, distance, direction)
+        # self.trials_phase = "Retract"
+        # await self.run_phase("Retract", delay, distance, direction)
 
         # Finalize the trial and handle breaks
         self.trials_completed = trial_num
@@ -300,8 +301,8 @@ class SimStudyController(Node):
         if phase_name == "Reaching":
             self.home()
             self.generate_target(distance, direction)
-        elif phase_name == "Retract":
-            self.home_for_retract()
+        # elif phase_name == "Retract":
+        #     self.home_for_retract()
         if self.current_state == 'evaluation_task':
             self.alternate_gain_param(
                 self.gain_calc(delay, distance, direction, phase_name))
