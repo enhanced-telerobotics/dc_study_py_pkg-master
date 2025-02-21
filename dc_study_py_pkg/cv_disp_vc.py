@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Vector3, Pose
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient
 import cv2
 import numpy as np
@@ -30,7 +30,7 @@ class VisionSystem(Node):
         cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
         self.fullscreen = False
         self.is_start = False  # Track countdown trigger
-
+        self.direction = np.array([0, 0, 0])  # Target direction
         # ROS 2 Subscriber
         self.robot_subscriber = self.create_subscription(
             Vector3,
@@ -38,9 +38,25 @@ class VisionSystem(Node):
             self.robot_callback,
             10
         )
-
+        self.target_subscriber = self.create_subscription(
+            Pose,
+            'target_cmd',
+            self.target_callback,
+            10
+        )
         self.sim.startSimulation()
         self.run_vision_loop()
+
+    def target_callback(self, msg):
+        x = msg.position.x - self.home[0]
+        y = msg.position.y - self.home[1]
+        z = msg.position.z - self.home[2]
+        magnitude = np.sqrt(x**2 + y**2 + z**2)
+
+        if magnitude > 0:
+            self.direction = np.array([x, y, z]) / magnitude
+        else:
+            self.direction = np.array([0, 0, 0])
 
     def robot_callback(self, msg):
         """msg.x ==1 is triggered when button is first pressed before start."""
@@ -106,8 +122,20 @@ class VisionSystem(Node):
                     elapsed_time = time.time() - start_time
                     progress = min(elapsed_time / progress_duration, 1.0)
                     self.draw_progress_bar(hstack_resized, progress, (300, 40))
-                    self.draw_progress_bar(
-                        hstack_resized, progress, (1260, 40))
+                    self.draw_progress_bar(hstack_resized, progress, (1260, 40))
+                    direction_text = {
+                        (0, 0, 0): "Press the Button to Start",
+                        (0, -1, 0): "Move towards right",
+                        (1, 0, 0): "Move towards front",
+                        (0, 0, 1): "Move towards up"
+                    }
+
+                    direction_tuple = tuple(self.direction)
+                    if direction_tuple in direction_text:
+                        cv2.putText(hstack_resized, direction_text[direction_tuple], (200, 1040),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 4, cv2.LINE_AA)
+                        cv2.putText(hstack_resized, direction_text[direction_tuple], (1160, 1040),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 4, cv2.LINE_AA)
                 # Display the image
                 cv2.imshow(self.window_name, hstack_resized)
 
