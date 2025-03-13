@@ -299,8 +299,11 @@ class SimStudyController(Node):
 
         # Initialize the phase
         if phase_name == "Reaching":
-            self.home()
             self.generate_target(distance, direction)
+            self.home()
+            """
+            TRYING THIS TO FIX LOGIC BUG
+            """
         # elif phase_name == "Retract":
         #     self.home_for_retract()
         if self.current_state == 'evaluation_task':
@@ -530,7 +533,7 @@ class SimStudyController(Node):
                     entry["distance"] == distance and
                         entry["direction"] == direction and
                             entry["phase"] == phase_name):
-                                gain = entry["gain"] * 0.2
+                                gain = entry["gain"] * 0.4
                                 if gain < 0.001:
                                     return 0.02
                                 else:
