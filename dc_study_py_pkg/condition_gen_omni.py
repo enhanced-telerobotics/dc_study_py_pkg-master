@@ -1,5 +1,5 @@
 """
-This is the fixed condition generator for the experiment.
+This script generates the trial conditions for haptic device.
 """
 import json
 import random
@@ -7,7 +7,7 @@ from itertools import product
 
 # Define the values for delay, distance, and direction
 delay_values = [100, 250, 400]  # For real trials
-dist_values = [0.005, 0.01, 0.015]
+dist_values = [-0.005, -0.01, -0.015, 0.005, 0.01, 0.015]
 dir_values = ['up', 'right', 'diag']
 zero_delay = 0  # For catch trials
 
@@ -44,7 +44,7 @@ baseline_conditions = [
         "distance": baseline_comb[i % len(baseline_comb)][0],
         "direction": baseline_comb[i % len(baseline_comb)][1]
     }
-    for i in range(27)
+    for i in range(54)
 ]
 
 # Initialize training task conditions
@@ -54,7 +54,7 @@ training_task_conditions = []
 num_blocks_training_task = len(real_trials_pool) // 3  # 3 real trials per block
 
 # Assign trials to training task blocks
-trial_number = 33  # Start trial numbering after practice and baseline trials
+trial_number = 60  # Start trial numbering after practice and baseline trials
 for block_num in range(1, num_blocks_training_task + 1):
     # Take 3 real trials from the pool
     real_trials = real_trials_pool[:3]
@@ -138,7 +138,7 @@ conditions = {
 }
 
 # Save the conditions to a JSON file
-file_path = "trial_con111ditions.json"
+file_path = "trial_conditions_omni.json"
 with open(file_path, 'w') as json_file:
     json.dump(conditions, json_file, indent=4)
 

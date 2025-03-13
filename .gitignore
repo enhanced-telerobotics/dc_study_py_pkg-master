@@ -4,3 +4,6 @@ dc_study_py_pkg/dataset/
 dc_study_py_pkg/gain_config.json
 dc_study_py_pkg/user_study_state.json
 dc_study_py_pkg/trial_conditions.json
+study_sim/delaycomp_dvrk-lua-ros2-dual-v46-no-peg.ttt
+study_sim/delaycomp_dvrk-lua-ros2-dual-v46-tweak-ringphy.ttt
+dc_study_py_pkg/user_study_state.json
